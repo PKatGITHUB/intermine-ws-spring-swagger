@@ -1,0 +1,186 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "InterMine Web Services specifications.",
+    "version": "1.0.0",
+    "title": "InterMine Web Services",
+    "termsOfService": "",
+    "contact": {
+      "email": "info@intermine.org",
+      "url": "http://intermine.org/",
+      "name": "InterMine"
+    },
+    "license": {
+      "name": "LGPL 2.1",
+      "url": "https://github.com/intermine/intermine/blob/dev/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "Version"
+    }
+  ],
+  "paths": {
+    "/version": {
+      "get": {
+        "summary": "Get the Web-Service Version.",
+        "description": "Get the web-service version number. This number is incremented for each change in functionality.",
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "text"
+            }
+          }
+        ],
+        "operationId": "version",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Version"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "example": 27
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Version"
+        ]
+      }
+    },
+    "/version/release": {
+      "get": {
+        "summary": "Get the Data-Warehouse Release Version.",
+        "description": "Get the release version of the data-warehouse. This is a string that is changed each time data is added or removed from the server. Thus this number is meant to reflect the contents rather than the interface of this set of services.",
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "text"
+            }
+          }
+        ],
+        "operationId": "versionRelease",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionRelease"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "46.1 2018 November"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Version"
+        ]
+      }
+    },
+    "/version/intermine": {
+      "get": {
+        "summary": "Get the InterMine Release Version.",
+        "description": "Get the InterMine version number. This number represents the version of InterMine code currently running. See https://github.com/intermine/intermine/releases for full details on release dates and versions.",
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "text"
+            }
+          }
+        ],
+        "operationId": "versionIntermine",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionRelease"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "3.1.0"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Version"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Version": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "VersionRelease": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}
