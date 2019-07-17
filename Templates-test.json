@@ -1,0 +1,192 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "InterMine Web Services specifications.",
+    "version": "1.0.0",
+    "title": "InterMine Web Services",
+    "termsOfService": "",
+    "contact": {
+      "email": "info@intermine.org",
+      "url": "http://intermine.org/",
+      "name": "InterMine"
+    },
+    "license": {
+      "name": "LGPL 2.1",
+      "url": "https://github.com/intermine/intermine/blob/dev/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "Templates"
+    }
+  ],
+  "paths": {
+    "/templates": {
+      "get": {
+        "summary": "Get the list of available templates.",
+        "description": "Get a listing of the templates configured in an InterMine instance. Each template contains a description of its properties, defining the parameters that must be provided to run it, as well as a definition of the output format for its results. If the request is authenticated to a user, then the templates that that has access to will also be returned.",
+        "operationId": "templatesGet",
+        "parameters": [
+          {
+            "name": "includeBroken",
+            "in": "query",
+            "required": false,
+            "description": "Whether or not to include invalid templates. Invalid templates cannot be run.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "xml",
+              "enum": [
+                "xml",
+                "json"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Templates"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Templates"
+        ]
+      },
+      "post": {
+        "summary": "Upload one or more templates.",
+        "description": "Upload a set of templates to the current user profile.",
+        "operationId": "templatesPost",
+        "parameters": [
+          {
+            "name": "xml",
+            "in": "query",
+            "required": false,
+            "description": "The xml or JSON to load, if using form parameters.",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "xml",
+              "enum": [
+                "xml",
+                "json"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/xml": {
+              "schema": {
+                "type": "string"
+              },
+              "example": "<template name=\"my-new-template\"> <query model=\"genomic\" view=\"Gene.symbol Gene.proteins.proteinDomains.name\"> <constraint editable=\"true\" path=\"Gene\" op=\"LOOKUP\" value=\"eve\"/> </query> </template>"
+            }
+          }
+        },
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleJsonModel"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Templates"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Templates": {
+        "type": "object",
+        "properties": {
+          "templates": {
+            "type": "object"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "SimpleJsonModel": {
+        "type": "object",
+        "properties": {
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      },
+      "JWTBearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "ApiKeyAuthToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "token"
+      }
+    }
+  }
+}

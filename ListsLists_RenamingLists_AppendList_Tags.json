@@ -1,0 +1,732 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "InterMine Web Services specifications.",
+    "version": "1.0.0",
+    "title": "InterMine Web Services",
+    "termsOfService": "",
+    "contact": {
+      "email": "info@intermine.org",
+      "url": "http://intermine.org/",
+      "name": "InterMine"
+    },
+    "license": {
+      "name": "LGPL 2.1",
+      "url": "https://github.com/intermine/intermine/blob/dev/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "Lists"
+    },
+    {
+      "name": "List Renaming"
+    },
+    {
+      "name": "Append to List"
+    },
+    {
+      "name": "List Tags"
+    }
+  ],
+  "paths": {
+    "/lists": {
+      "get": {
+        "summary": "Find lists on the server.",
+        "description": "This service allows users to get back a list of\n            lists that they have access to. The lists can be optionally\n            be filtered on the server by name, thus returning just a single\n            name, or if '*' wildcards are used, a subset of all lists.",
+        "operationId": "listsGet",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "description": "An optional filter by name.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "json",
+              "enum": [
+                "json",
+                "html",
+                "text",
+                "csv",
+                "tab"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListsGet"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Lists"
+        ]
+      },
+      "post": {
+        "summary": "Create a new list.",
+        "description": "This service allows users to create a new\n      list by uploading a set of identifiers.\n        The list is created by using the default settings\n        of the ID resolution mechanism and then taking\n        all the good matches.",
+        "operationId": "listsPost",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "The name of the new list.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "The type of the list.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "replaceExisting",
+            "in": "query",
+            "description": "Whether or not to replace any existing list of this name.",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "enum": [
+                true,
+                false
+              ]
+            }
+          },
+          {
+            "name": "extraValue",
+            "in": "query",
+            "description": "A disambiguating value (such as organism name).",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "json",
+              "enum": [
+                "json",
+                "text"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Identifiers for objects to add to the list, tab, comma or newline separated.",
+          "required": true,
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListsPost"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Lists"
+        ]
+      },
+      "delete": {
+        "summary": "Delete an existing list.",
+        "description": "This service allows users to delete\n        lists that belong to them.",
+        "operationId": "listsDelete",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "The name of the list to delete.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "json",
+              "enum": [
+                "json",
+                "text"
+              ]
+            }
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListsDelete"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Lists"
+        ]
+      }
+    },
+    "/lists/rename": {
+      "get": {
+        "summary": "Rename an Existing List.",
+        "description": "This service allows users to change the name of an existing list that they are the owner of.",
+        "operationId": "listRenameGet",
+        "parameters": [
+          {
+            "name": "oldname",
+            "in": "query",
+            "description": "The current name of the list.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "newname",
+            "in": "query",
+            "description": "The name the list should have.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListRename"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "List Renaming"
+        ]
+      },
+      "post": {
+        "summary": "Rename an Existing List.",
+        "description": "This service allows users to change the name of an existing list that they are the owner of.",
+        "operationId": "listRenamePost",
+        "parameters": [
+          {
+            "name": "oldname",
+            "in": "query",
+            "description": "The current name of the list.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "newname",
+            "in": "query",
+            "description": "The name the list should have.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListRename"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "List Renaming"
+        ]
+      }
+    },
+    "/lists/append": {
+      "post": {
+        "summary": "Add items to an existing list by identifiers.",
+        "description": "This service allows users to add new items to an existing\n    list by uploading a set of identifiers. This is equivalent to\n    creating a new list from a set of identifiers, and then performing\n    the union operation on that list an existing one, if the resulant\n    list replaced the existing list.",
+        "operationId": "listsAppendPost",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "The name of the list to append to. The list must exist, and belong to you.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "json",
+              "enum": [
+                "json",
+                "text"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Identifiers for objects to add to the list, tab, comma or newline separated.",
+          "required": true,
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListAppend"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Append to List"
+        ]
+      }
+    },
+    "/list/tags": {
+      "get": {
+        "summary": "Get the tags for a list, or all the tags for a given user.",
+        "description": "Fetch an up-to-date list of all tags associated with a list, or all lists.",
+        "operationId": "listTagsGet",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "description": "The name of a list whose tags to retrieve. If no list is provided, then all the tags associated with the authenticating user will be returned.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "json",
+              "enum": [
+                "xml",
+                "json",
+                "tab",
+                "csv"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tags"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "List Tags"
+        ]
+      },
+      "post": {
+        "summary": "Add one or more tags to a list.",
+        "operationId": "listTagsPost",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "description": "The name of a list to add the tag(s) to..",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "required": true,
+            "description": "The name of the tags to add. It should take to from of a semi-colon delimited concatenation of the tag names.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "json",
+              "enum": [
+                "xml",
+                "json",
+                "tab",
+                "csv"
+              ]
+            }
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tags"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "List Tags"
+        ]
+      },
+      "delete": {
+        "summary": "Delete one or more tags from a list.",
+        "operationId": "templateTagsDelete",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "description": "The name of a list to add the tag(s) to.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "required": true,
+            "description": "The name of the tags to remove. It should take to from of a semi-colon delimited concatenation of the tag names.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "json",
+              "enum": [
+                "xml",
+                "json",
+                "tab",
+                "csv"
+              ]
+            }
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tags"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "List Tags"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ListsGet": {
+        "type": "object",
+        "properties": {
+          "lists": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "ListsDelete": {
+        "type": "object",
+        "properties": {
+          "listName": {
+            "type": "string"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "ListsPost": {
+        "type": "object",
+        "properties": {
+          "listId": {
+            "type": "integer"
+          },
+          "listName": {
+            "type": "string"
+          },
+          "listSize": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string"
+          },
+          "unmatchedIdentifiers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "ListRename": {
+        "type": "object",
+        "properties": {
+          "listId": {
+            "type": "integer"
+          },
+          "listName": {
+            "type": "string"
+          },
+          "listSize": {
+            "type": "integer"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "ListAppend": {
+        "type": "object",
+        "properties": {
+          "listId": {
+            "type": "integer"
+          },
+          "listName": {
+            "type": "string"
+          },
+          "listSize": {
+            "type": "integer"
+          },
+          "unmatchedIdentifiers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "Tags": {
+        "type": "object",
+        "properties": {
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      },
+      "JWTBearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "ApiKeyAuthToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "token"
+      }
+    }
+  }
+}

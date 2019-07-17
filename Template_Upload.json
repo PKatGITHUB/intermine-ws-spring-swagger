@@ -1,0 +1,188 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "InterMine Web Services specifications.",
+    "version": "1.0.0",
+    "title": "InterMine Web Services",
+    "termsOfService": "",
+    "contact": {
+      "email": "info@intermine.org",
+      "url": "http://intermine.org/",
+      "name": "InterMine"
+    },
+    "license": {
+      "name": "LGPL 2.1",
+      "url": "https://github.com/intermine/intermine/blob/dev/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "Template Upload"
+    }
+  ],
+  "paths": {
+    "/template/upload": {
+      "post": {
+        "summary": "Save a Template, or Overwrite an Existing One.",
+        "description": "This service allows users to save templates they have authored on the server, associated with their account. The templates once saved can be used as any other template query.",
+        "operationId": "templateUploadPost",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "One or more templates, serialised in XML or JSON format.",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "description": "The version of the XML format.",
+            "schema": {
+              "type": "integer",
+              "default": 2
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "text",
+              "enum": [
+                "text",
+                "json",
+                "html",
+                "xml"
+              ]
+            }
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleJsonModel"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Template Upload"
+        ]
+      },
+      "get": {
+        "summary": "Save a Template, or Overwrite an Existing One.",
+        "description": "This service allows users to save templates they have authored on the server, associated with their account. The templates once saved can be used as any other template query.",
+        "operationId": "templateUploadGet",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "One or more templates, serialised in XML or JSON format.",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "description": "The version of the XML format.",
+            "schema": {
+              "type": "integer",
+              "default": 2
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "text",
+              "enum": [
+                "text",
+                "json",
+                "html",
+                "xml"
+              ]
+            }
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleJsonModel"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Template Upload"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SimpleJsonModel": {
+        "type": "object",
+        "properties": {
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      },
+      "JWTBearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "ApiKeyAuthToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "token"
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "InterMine Web Services specifications.",
+    "version": "1.0.0",
+    "title": "InterMine Web Services",
+    "termsOfService": "",
+    "contact": {
+      "email": "info@intermine.org",
+      "url": "http://intermine.org/",
+      "name": "InterMine"
+    },
+    "license": {
+      "name": "LGPL 2.1",
+      "url": "https://github.com/intermine/intermine/blob/dev/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "Who-Am-I?"
+    }
+  ],
+  "paths": {
+    "/user/whoami": {
+      "get": {
+        "summary": "Get details about the authenticated user.",
+        "description": "Retrieve information about the currently authenticated user. This can be used to display the user's name.",
+        "operationId": "whoAmI",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WhoAmI"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Who-Am-I?"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "WhoAmI": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

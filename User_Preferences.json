@@ -1,0 +1,230 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "InterMine Web Services specifications.",
+    "version": "1.0.0",
+    "title": "InterMine Web Services",
+    "termsOfService": "",
+    "contact": {
+      "email": "info@intermine.org",
+      "url": "http://intermine.org/",
+      "name": "InterMine"
+    },
+    "license": {
+      "name": "LGPL 2.1",
+      "url": "https://github.com/intermine/intermine/blob/dev/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "User Preferences"
+    }
+  ],
+  "paths": {
+    "/user/preferences": {
+      "get": {
+        "summary": "Get a user's preferences.",
+        "description": "Get a complete listing of a user's preferences. This is presented as a mapping from string key to string value.",
+        "operationId": "userPreferencesGet",
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Preferences"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "User Preferences"
+        ]
+      },
+      "post": {
+        "summary": "Set the value of one or more preferences.",
+        "description": "This service allows a user to store or change a key value pair associated with their account. The keys may have a particular meaning. All values will be stored and retrieved as strings.",
+        "operationId": "userPreferencesPost",
+        "parameters": [
+          {
+            "name": "preferences",
+            "in": "query",
+            "required": false,
+            "description": "The preference to set.",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Preferences"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "User Preferences"
+        ]
+      },
+      "put": {
+        "summary": "Set the value of one or more preferences.",
+        "description": "This service allows a user to store or change a key value pair associated with their account. The keys may have a particular meaning. All values will be stored and retrieved as strings.",
+        "operationId": "userPreferencesPut",
+        "parameters": [
+          {
+            "name": "preferences",
+            "in": "query",
+            "required": false,
+            "description": "The preference to set.",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Preferences"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "User Preferences"
+        ]
+      },
+      "delete": {
+        "summary": "Remove one or all preferences.",
+        "description": "Delete either a single preference from a user's set of stored preferences, or deletes all stored preference values.",
+        "operationId": "userPreferencesDelete",
+        "parameters": [
+          {
+            "name": "key",
+            "in": "query",
+            "required": false,
+            "description": "The preference to delete. If not provided, ALL will be cleared",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Preferences"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "User Preferences"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Preferences": {
+        "type": "object",
+        "properties": {
+          "preferences": {
+            "type": "object"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      },
+      "JWTBearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "ApiKeyAuthToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "token"
+      }
+    }
+  }
+}

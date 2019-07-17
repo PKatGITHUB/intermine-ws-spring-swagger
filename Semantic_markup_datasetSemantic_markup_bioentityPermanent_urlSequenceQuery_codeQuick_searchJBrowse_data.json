@@ -1,0 +1,759 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "InterMine Web Services specifications.",
+    "version": "1.0.0",
+    "title": "InterMine Web Services",
+    "termsOfService": "",
+    "contact": {
+      "email": "info@intermine.org",
+      "url": "http://intermine.org/",
+      "name": "InterMine"
+    },
+    "license": {
+      "name": "LGPL 2.1",
+      "url": "https://github.com/intermine/intermine/blob/dev/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "Semantic Markup"
+    },
+    {
+      "name": "Permanent URL"
+    },
+    {
+      "name": "Sequence Access"
+    },
+    {
+      "name": "Generated Code"
+    },
+    {
+      "name": "QuickSearch"
+    },
+    {
+      "name": "JBrowse Simple Data Service"
+    }
+  ],
+  "paths": {
+    "/semantic-markup/dataset": {
+      "get": {
+        "summary": "Get semantic markup for dataset type.",
+        "description": "This service provides semantic markup for DataSet type.",
+        "operationId": "semanticMarkupDataset",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "description": "The name of the dataset.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "required": false,
+            "description": "The description of the dataset.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "url",
+            "in": "query",
+            "required": false,
+            "description": "The url of the dataset.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SemanticMarkup"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Semantic Markup"
+        ]
+      }
+    },
+    "/semantic-markup/bioentity": {
+      "get": {
+        "summary": "Get semantic markup for bioentity.",
+        "description": "This service provides semantic markup for BioChemEntity type.",
+        "operationId": "semanticMarkupBioEntity",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "description": "The type of the bioentity.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "description": "The primary identifier of the bioentity.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SemanticMarkup"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Semantic Markup"
+        ]
+      }
+    },
+    "/permanent-url": {
+      "get": {
+        "summary": "Get permanent URL for data object.",
+        "description": "This service generates permanent URL based on the class type and identifier.",
+        "operationId": "permanentUrl",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "description": "The type of the entity.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "description": "The internal intermine ID.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PermanentUrl"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Permanent URL"
+        ]
+      }
+    },
+    "/sequence": {
+      "get": {
+        "summary": "Get a portion of a sequence-like object.",
+        "description": "Get either the entire sequence of an object, or fetch an indexed sub-sequence of it. This service expects a query with a single output column that resolves to a sub-sequenceable object. For example to get a sub-sequence of the genomic sequence of the fly X chromosome in a genomic mine, the following query could be used: ``` <query model=\"genomic\" view=\"Chromosome.sequence.residues\"> <constraint path=\"Chromosome\" op=\"LOOKUP\" value=\"X\" extraValue=\"D. melanogaster\"/> </query> ``` ",
+        "operationId": "sequenceGet",
+        "parameters": [
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "description": "The start index.",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "description": "The end index.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "The xml OR JSON of the query to run.",
+            "schema": {
+              "type": "string",
+              "default": "&lt;query model=&quot;genomic&quot; view=&quot;Chromosome.sequence.residues&quot;&gt; &lt;constraint path=&quot;Chromosome&quot; op=&quot;LOOKUP&quot; value=&quot;X&quot; extraValue=&quot;D. melanogaster&quot;/&gt; &lt;/query&gt;"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sequence"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Sequence Access"
+        ]
+      },
+      "post": {
+        "summary": "Get a portion of a sequence-like object.",
+        "description": "Get either the entire sequence of an object, or fetch an indexed sub-sequence of it. This service expects a query with a single output column that resolves to a sub-sequenceable object. For example to get a sub-sequence of the genomic sequence of the fly X chromosome in a genomic mine, the following query could be used: ``` <query model=\"genomic\" view=\"Chromosome.sequence.residues\"> <constraint path=\"Chromosome\" op=\"LOOKUP\" value=\"X\" extraValue=\"D. melanogaster\"/> </query> ``` ",
+        "operationId": "sequencePost",
+        "parameters": [
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "description": "The start index.",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "description": "The end index.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "The xml OR JSON of the query to run.",
+            "schema": {
+              "type": "string",
+              "default": "&lt;query model=&quot;genomic&quot; view=&quot;Chromosome.sequence.residues&quot;&gt; &lt;constraint path=&quot;Chromosome&quot; op=&quot;LOOKUP&quot; value=&quot;X&quot; extraValue=&quot;D. melanogaster&quot;/&gt; &lt;/query&gt;"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sequence"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Sequence Access"
+        ]
+      }
+    },
+    "/query/code": {
+      "get": {
+        "summary": "Get the code to run a pathquery in a given language.",
+        "description": "This service provides the ability to generate code in one of several languages based on a pathquery provided in serialised form.",
+        "operationId": "generatedCodeGet",
+        "parameters": [
+          {
+            "name": "lang",
+            "in": "query",
+            "required": true,
+            "description": "The language to generate code in.",
+            "schema": {
+              "type": "string",
+              "default": "py",
+              "enum": [
+                "pl",
+                "py",
+                "rb",
+                "js",
+                "java"
+              ]
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "The query to generate code for, in XML or JSON form.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "text",
+              "enum": [
+                "text",
+                "xml",
+                "json"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeneratedCode"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Generated Code"
+        ]
+      },
+      "post": {
+        "summary": "Get the code to run a pathquery in a given language.",
+        "description": "This service provides the ability to generate code in one of several languages based on a pathquery provided in serialised form.",
+        "operationId": "generatedCodePost",
+        "parameters": [
+          {
+            "name": "lang",
+            "in": "query",
+            "required": true,
+            "description": "The language to generate code in.",
+            "schema": {
+              "type": "string",
+              "default": "py",
+              "enum": [
+                "pl",
+                "py",
+                "rb",
+                "js",
+                "java"
+              ]
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "The query to generate code for, in XML or JSON form.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "text",
+              "enum": [
+                "text",
+                "xml",
+                "json"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeneratedCode"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Generated Code"
+        ]
+      }
+    },
+    "/search": {
+      "get": {
+        "summary": "Perform a key-word search and retrieve the results.",
+        "description": "Run a general key-word style search over all data in the data-warehouse. Rather than a structured query for a specific type of data, this allows the user to search broadly over a range of data types, and use facetting information to restrict the search results.",
+        "operationId": "quickSearchGet",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "description": "The query string to search with. If absent, or blank, all results will be returned.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "description": "The maximum number of records to return. If no limit is provided, up to 100 results will be returned.",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "description": "The index of the first result to return.",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "list",
+            "in": "query",
+            "required": false,
+            "description": "A list to search within.",
+            "schema": {
+              "type": "string",
+              "default": "{name}"
+            }
+          },
+          {
+            "name": "facet_?",
+            "in": "query",
+            "required": false,
+            "description": "A facet parameter, eg facet_Organism=D.melanogaster",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuickSearch"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "QuickSearch"
+        ]
+      },
+      "post": {
+        "summary": "Perform a key-word search and retrieve the results.",
+        "description": "Run a general key-word style search over all data in the data-warehouse. Rather than a structured query for a specific type of data, this allows the user to search broadly over a range of data types, and use facetting information to restrict the search results.",
+        "operationId": "quickSearchPost",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "description": "The query string to search with. If absent, or blank, all results will be returned.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "description": "The maximum number of records to return. If no limit is provided, up to 100 results will be returned.",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "description": "The index of the first result to return.",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "list",
+            "in": "query",
+            "required": false,
+            "description": "A list to search within.",
+            "schema": {
+              "type": "string",
+              "default": "{name}"
+            }
+          },
+          {
+            "name": "facet_?",
+            "in": "query",
+            "required": false,
+            "description": "A facet parameter, eg facet_Organism=D.melanogaster",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuickSearch"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "QuickSearch"
+        ]
+      }
+    },
+    "/data/{type}": {
+      "get": {
+        "summary": "Get Data about Objects of the Given Type.",
+        "description": "This service allows simple access to queries against a single type. This is meant to allow for simple linking and resource-based access to InterMine data.",
+        "operationId": "jBrowseSimpleData",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "description": "The type of the object to find.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "{name}"
+            }
+          },
+          {
+            "name": "Range",
+            "in": "header",
+            "description": "The range of values requested.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "records=0-10"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "An optional filter over the objects.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JBrowseData"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "JBrowse Simple Data Service"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SemanticMarkup": {
+        "type": "object",
+        "properties": {
+          "properties": {
+            "type": "object"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "PermanentUrl": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "object"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "Sequence": {
+        "type": "object",
+        "properties": {
+          "features": {
+            "type": "object"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "GeneratedCode": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "object"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "QuickSearch": {
+        "type": "object",
+        "properties": {
+          "totalHits": {
+            "type": "object"
+          },
+          "facets": {
+            "type": "object"
+          },
+          "results": {
+            "type": "object"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "JBrowseData": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "object"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

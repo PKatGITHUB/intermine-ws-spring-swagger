@@ -1,0 +1,324 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "InterMine Web Services specifications.",
+    "version": "1.0.0",
+    "title": "InterMine Web Services",
+    "termsOfService": "",
+    "contact": {
+      "email": "info@intermine.org",
+      "url": "http://intermine.org/",
+      "name": "InterMine"
+    },
+    "license": {
+      "name": "LGPL 2.1",
+      "url": "https://github.com/intermine/intermine/blob/dev/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "Version"
+    },
+    {
+      "name": "Data Model"
+    },
+    {
+      "name": "Summary Fields"
+    }
+  ],
+  "paths": {
+    "/version": {
+      "get": {
+        "summary": "Get the Web-Service Version.",
+        "description": "Get the web-service version number. This number is incremented for each change in functionality.",
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "text",
+              "enum": [
+                "text",
+                "json"
+              ]
+            }
+          }
+        ],
+        "operationId": "version",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Version"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "example": 27
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Version"
+        ]
+      }
+    },
+    "/version/release": {
+      "get": {
+        "summary": "Get the Data-Warehouse Release Version.",
+        "description": "Get the release version of the data-warehouse. This is a string that is changed each time data is added or removed from the server. Thus this number is meant to reflect the contents rather than the interface of this set of services.",
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "text",
+              "enum": [
+                "text",
+                "json"
+              ]
+            }
+          }
+        ],
+        "operationId": "versionRelease",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionRelease"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "46.1 2018 November"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Version"
+        ]
+      }
+    },
+    "/version/intermine": {
+      "get": {
+        "summary": "Get the InterMine Release Version.",
+        "description": "Get the InterMine version number. This number represents the version of InterMine code currently running. See https://github.com/intermine/intermine/releases for full details on release dates and versions.",
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "text",
+              "enum": [
+                "text",
+                "json"
+              ]
+            }
+          }
+        ],
+        "operationId": "versionIntermine",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionRelease"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "3.1.0"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Version"
+        ]
+      }
+    },
+    "/model": {
+      "get": {
+        "summary": "Get a description of the data model.",
+        "description": "An InterMine data model can be fully described as a set of classes with various properties. This data model is useful for constructing queries and interpreting the results returned from the service.",
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "xml",
+              "enum": [
+                "xml",
+                "json"
+              ]
+            }
+          }
+        ],
+        "operationId": "model",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Model"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "example": 27
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Data Model"
+        ]
+      }
+    },
+    "/summaryfields": {
+      "get": {
+        "summary": "Get the fields used to summarise the class.",
+        "parameters": [
+          {
+            "name": "norefs",
+            "in": "query",
+            "description": "Whether to exclude references from the summary fields",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "enum": [
+                true,
+                false
+              ]
+            }
+          }
+        ],
+        "operationId": "summaryfields",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Summaryfields"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Summary Fields"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Version": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "VersionRelease": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "Model": {
+        "type": "object",
+        "properties": {
+          "model": {
+            "type": "object"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "Summaryfields": {
+        "type": "object",
+        "properties": {
+          "classes": {
+            "type": "object"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

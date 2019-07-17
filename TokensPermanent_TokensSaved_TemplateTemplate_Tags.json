@@ -1,0 +1,664 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "InterMine Web Services specifications.",
+    "version": "1.0.0",
+    "title": "InterMine Web Services",
+    "termsOfService": "",
+    "contact": {
+      "email": "info@intermine.org",
+      "url": "http://intermine.org/",
+      "name": "InterMine"
+    },
+    "license": {
+      "name": "LGPL 2.1",
+      "url": "https://github.com/intermine/intermine/blob/dev/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "Tokens"
+    },
+    {
+      "name": "Permanent Token"
+    },
+    {
+      "name": "Saved Template"
+    },
+    {
+      "name": "Template Tags"
+    }
+  ],
+  "paths": {
+    "/user/tokens": {
+      "get": {
+        "summary": "Get List of Permanent Tokens.",
+        "description": "Tokens are issued so that users may provide access to their private data to third parties in a more secure manner. This service lets users inspect the permanent tokens they have issued. <br/><br/> No access is provide here to other tokens (24hrs, api, day), for security and other reasons. Please look at the `Session` service for issuing new temporary tokens.",
+        "operationId": "userTokensGet",
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tokens"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Tokens"
+        ]
+      },
+      "post": {
+        "summary": "Create a New Token.",
+        "description": "Tokens are issued so that users may provide access to their private data to third parties in a more secure manner. This service lets users create a new token they can provide to others. <br/><br/> The different token types are: <br/><br/> `day` : A token that will be valid for up to 24 hrs. <br/><br/> `once` : A token that can only be used for a single request. <br/><br/> `api` : The main Read-Write API key of the user. Generating one of these replaces the currrent key. <br/><br/> `perm` : A permanent Read-Only token that others can use.",
+        "operationId": "userTokensPost",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "The type of token to issue.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "day",
+              "enum": [
+                "day",
+                "once",
+                "api",
+                "perm"
+              ]
+            }
+          },
+          {
+            "name": "message",
+            "in": "query",
+            "description": "An optional message to associate with a token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Tokens"
+        ]
+      },
+      "delete": {
+        "summary": "Delete all Tokens.",
+        "description": "Delete all permanent tokens. <br/><br/>  Permanent tokens are issued so that users may provide access to their private data to third parties in a more secure manner. This service lets users all the delete permanent tokens they have issued.",
+        "operationId": "userTokensDelete",
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleJsonModel"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Tokens"
+        ]
+      }
+    },
+    "/user/tokens/{uid}": {
+      "get": {
+        "summary": "Get Token Information.",
+        "description": "Retrieve information about a specific permanent token. <br/><br/>\n         Permanent tokens are issued so that users may provide access\n         to their private data to third parties in a more secure manner.\n         This service lets users inspect a specific permanent tokens they have\n         issued.",
+        "operationId": "permanentTokensGet",
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "description": "The identifier of one of your tokens.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PermanentToken"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Permanent Token"
+        ]
+      },
+      "delete": {
+        "summary": "Delete a Token.",
+        "description": "Delete a specific permanent token. <br/><br/>\n         Permanent tokens are issued so that users may provide access\n         to their private data to third parties in a more secure manner.\n         This service lets users delete permanent tokens they have\n         issued.",
+        "operationId": "permanentTokenDelete",
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "description": "The identifier of one of your tokens.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleJsonModel"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Permanent Token"
+        ]
+      }
+    },
+    "/templates/{name}": {
+      "get": {
+        "summary": "Retrieve a template by name.",
+        "description": "This resource retrieves a representation of a named template, returning\n        404 if the template cannot be found.\n        <br/><br/>\n        If the request is authenticated, then the templates visible to that user (created by\n        or shared with them) will be included along with publically accessible templates.",
+        "operationId": "savedTemplateGet",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "The name of the template to fetch.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "json",
+              "enum": [
+                "xml",
+                "json"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedTemplate"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Saved Template"
+        ]
+      },
+      "delete": {
+        "summary": "Delete a template by name.",
+        "description": "This resource exposes the ability to delete specific templates, identified\n        by name.\n        <br/><br/>\n        A user can only delete templates that they own, and must be executed\n        with `Read/Write` permission.",
+        "operationId": "savedTemplateDelete",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "The name of the template to delete.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "json",
+              "enum": [
+                "xml",
+                "json"
+              ]
+            }
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleJsonModel"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Saved Template"
+        ]
+      }
+    },
+    "/template/tags": {
+      "get": {
+        "summary": "Get the tags for a template, or all the tags for a given user.",
+        "description": "Fetch an up-to-date list of all tags associated with a template, or all templates.",
+        "operationId": "templateTagsGet",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "description": "The name of a template whose tags to retrieve. If no template is provided, then all the tags associated with the authenticating user will be returned.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "json",
+              "enum": [
+                "xml",
+                "json",
+                "tab",
+                "csv"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateTags"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Template Tags"
+        ]
+      },
+      "post": {
+        "summary": "Add one or more tags to a list.",
+        "operationId": "templateTagsPost",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "description": "The name of a template to add the tag(s) to.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "required": true,
+            "description": "The name of the tags to add. It should take to from of a semi-colon delimited concatenation of the tag names.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "json",
+              "enum": [
+                "xml",
+                "json",
+                "tab",
+                "csv"
+              ]
+            }
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateTags"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Template Tags"
+        ]
+      },
+      "delete": {
+        "summary": "Delete one or more tags from a list.",
+        "operationId": "templateTagsDelete",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "description": "The name of a template to add the tag(s) to.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "required": true,
+            "description": "The name of the tags to remove. It should take to from of a semi-colon delimited concatenation of the tag names.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "json",
+              "enum": [
+                "xml",
+                "json",
+                "tab",
+                "csv"
+              ]
+            }
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateTags"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Template Tags"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Tokens": {
+        "type": "object",
+        "properties": {
+          "tokens": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "Token": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "SimpleJsonModel": {
+        "type": "object",
+        "properties": {
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "PermanentToken": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "object"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "SavedTemplate": {
+        "type": "object",
+        "properties": {
+          "template": {
+            "type": "object"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "TemplateTags": {
+        "type": "object",
+        "properties": {
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      },
+      "JWTBearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "ApiKeyAuthToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "token"
+      }
+    }
+  }
+}

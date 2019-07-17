@@ -1,0 +1,116 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "InterMine Web Services specifications.",
+    "version": "1.0.0",
+    "title": "InterMine Web Services",
+    "termsOfService": "",
+    "contact": {
+      "email": "info@intermine.org",
+      "url": "http://intermine.org/",
+      "name": "InterMine"
+    },
+    "license": {
+      "name": "LGPL 2.1",
+      "url": "https://github.com/intermine/intermine/blob/dev/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "Key Fields"
+    },
+    {
+      "name": "Branding"
+    }
+  ],
+  "paths": {
+    "/classkeys": {
+      "get": {
+        "summary": "Get the fields used to identify an object.",
+        "description": "Get the fields configured for this service to identify objects uniquely within the database.",
+        "operationId": "classkeys",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Summaryfields"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Key Fields"
+        ]
+      }
+    },
+    "/branding": {
+      "get": {
+        "summary": "Get Branding Information.",
+        "description": "Retrieve branding information, so that elements may be visually styled appropriately for their source.",
+        "operationId": "branding",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Branding"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Branding"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Summaryfields": {
+        "type": "object",
+        "properties": {
+          "classes": {
+            "type": "object"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "Branding": {
+        "type": "object",
+        "properties": {
+          "properties": {
+            "type": "object"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}
