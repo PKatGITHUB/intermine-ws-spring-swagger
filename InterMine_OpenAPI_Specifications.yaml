@@ -1,0 +1,5403 @@
+openapi: 3.0.0
+info:
+  description: InterMine Web Services specifications.
+  version: 1.0.0
+  title: InterMine Web Services
+  termsOfService: ''
+  contact:
+    email: info@intermine.org
+    url: 'http://intermine.org/'
+    name: InterMine
+  license:
+    name: LGPL 2.1
+    url: 'https://github.com/intermine/intermine/blob/dev/LICENSE'
+tags:
+  - name: Version
+  - name: Data Model
+  - name: Summary Fields
+  - name: Key Fields
+  - name: Branding
+  - name: Schemata
+  - name: FacetList
+  - name: Session
+  - name: WebProperties
+  - name: Semantic Markup
+  - name: Templates (System)
+  - name: FacetSearch
+  - name: User Creation
+  - name: Permanent URL
+  - name: Sequence Access
+  - name: Generated Code
+  - name: QuickSearch
+  - name: JBrowse Simple Data Service
+  - name: Who-Am-I?
+  - name: Token
+  - name: Templates
+  - name: Template Upload
+  - name: Deregistration Tokens
+  - name: User
+  - name: User Preferences
+  - name: Tokens
+  - name: Permanent Token
+  - name: Saved Template
+  - name: Template Tags
+  - name: Lists
+  - name: List Renaming
+  - name: Append to List
+  - name: List Tags
+  - name: List Union
+  - name: List Substraction
+  - name: List Intersection
+  - name: List Difference
+  - name: Widgets
+  - name: Query Store
+  - name: Query Results
+  - name: Find Lists Containing an Object
+  - name: Jaccard Index
+  - name: List Sharing
+  - name: List Invitations
+  - name: Saved Query
+  - name: Saved Queries
+  - name: Save Query
+  - name: Possible Values
+  - name: Id Resolution
+  - name: Create List from Query
+  - name: Add to List from Query
+  - name: Template Results
+  - name: Template to list
+  - name: Append to List from Template Results
+  - name: Graphical Widgets
+  - name: Table Widgets
+  - name: Enrichment Widgets
+paths:
+  /version:
+    get:
+      summary: Get the Web-Service Version.
+      description: Get the web-service version number. This number is incremented for each change in functionality.
+      parameters:
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: text
+            enum: [text,json]
+      operationId: version
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Version'
+            text/plain:
+              schema:
+                type: integer
+                example: 27
+      tags:
+        - Version
+  /version/release:
+    get:
+      summary: Get the Data-Warehouse Release Version.
+      description: Get the release version of the data-warehouse. This is a string that is changed each time data is added or removed from the server. Thus this number is meant to reflect the contents rather than the interface of this set of services.
+      parameters:
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: text
+            enum: [text,json]
+      operationId: versionRelease
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionRelease'
+            text/plain:
+              schema:
+                type: string
+                example: 46.1 2018 November
+      tags:
+        - Version
+  /version/intermine:
+    get:
+      summary: Get the InterMine Release Version.
+      description: Get the InterMine version number. This number represents the version of InterMine code currently running. See https://github.com/intermine/intermine/releases for full details on release dates and versions.
+      parameters:
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: text
+            enum: [text,json]
+      operationId: versionIntermine
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionRelease'
+            text/plain:
+              schema:
+                type: string
+                example: 3.1.0
+      tags:
+        - Version
+  /model:
+    get:
+      summary: Get a description of the data model.
+      description: An InterMine data model can be fully described as a set of classes with various properties. This data model is useful for constructing queries and interpreting the results returned from the service.
+      parameters:
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: xml
+            enum: [xml, json]
+      operationId: model
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+            application/xml:
+              schema:
+                type: object
+                example: 27
+      tags:
+        - Data Model
+  /summaryfields:
+    get:
+      summary: Get the fields used to summarise the class.
+      parameters:
+        - name: norefs
+          in: query
+          description: Whether to exclude references from the summary fields
+          required: false
+          schema:
+            type: boolean
+            default: false
+            enum: [true, false]
+      operationId: summaryfields 
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Summaryfields'
+      tags:
+        - Summary Fields
+  /classkeys:
+    get:
+      summary: Get the fields used to identify an object.
+      description: Get the fields configured for this service to identify objects uniquely within the database.
+      operationId: classkeys
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Summaryfields'
+      tags:
+        - Key Fields
+  /branding:
+    get:
+      summary: Get Branding Information.
+      description: Retrieve branding information, so that elements may be visually styled appropriately for their source.
+      operationId: branding
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Branding'
+      tags:
+        - Branding
+  /schema:
+    get:
+      summary: Get all Schemata.
+      description: Get a listing of the available schemata.
+      operationId: allSchema
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schema'
+      tags:
+        - Schemata
+  /schema/{name}:
+    get:
+      summary: Get one Schema.
+      description: Retrieve a specific schema.
+      operationId: oneSchema
+      parameters:
+      - name: "name"
+        in: "path"
+        description: "The name of the schema to retrieve"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        '200':
+          description: OK
+      tags:
+        - Schemata
+  /facet-list:
+    get:
+      summary: Retrieve all the possible facets.
+      description: Retrieve all the possible facets.
+      operationId: facetlist
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacetList'
+      tags:
+        - FacetList
+  /session:
+    get:
+      summary: Open a new Web-Services Session.
+      description: This service opens a new 24 session for users. If authenticated to an existing user, it has the same effect as requesting a new 24hr token. But for unauthenticated users, it allocates a new temporary profile, and assigns a 24hr usage token.
+      operationId: session
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+      tags:
+        - Session
+  /web-properties:
+    get:
+      summary: Get a description of the data model.
+      description: The InterMine user interface can be customised with a set of properties, e.g. default values for the list upload, default values for the region search etc.
+      operationId: webProperties
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebProperties'
+      tags:
+        - WebProperties
+  /semantic-markup/datacatalog:
+    get:
+      summary: Get semantic markup for datacatalog type.
+      description: This service provides semantic markup for the InterMine home page.
+      operationId: semanticMarkupDatacatalog
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SemanticMarkup'
+      tags:
+        - Semantic Markup
+  /templates/system:
+    get:
+      summary: Get the list of system templates.
+      description: Get a listing of the templates configured in an InterMine instance tagged with the `im:converter` tag.
+      parameters:
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: xml
+            enum: [xml, json]
+      operationId: templatesSystem
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplatesSystem'
+            application/xml:
+              schema:
+                type: object
+      tags:
+        - Templates (System)
+  /facets:
+    get:
+      summary: Perform a key-word search and retrieve the facets.
+      description: Run a general key-word style search over all data in the data-warehouse. This is similar to Quick Search but here only the facet category counts are returned.
+      operationId: facetSearchGet
+      parameters:
+        - name: q
+          in: query
+          required: false
+          description: The query string to search with. If absent, or blank, all results will be returned.
+          schema:
+            type: string
+        - name: list
+          in: query
+          required: false
+          description: A list to search within.
+          schema:
+            type: string
+            default: "{name}"
+        - name: facet_?
+          in: query
+          required: false
+          description: A facet parameter, eg facet_Organism=D.melanogaster
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacetSearch'
+      tags:
+        - FacetSearch
+    post:
+      summary: Perform a key-word search and retrieve the facets.
+      description: Run a general key-word style search over all data in the data-warehouse. This is similar to Quick Search but here only the facet category counts are returned.
+      operationId: facetSearchPost
+      parameters:
+        - name: q
+          in: query
+          required: false
+          description: The query string to search with. If absent, or blank, all results will be returned.
+          schema:
+            type: string
+        - name: list
+          in: query
+          required: false
+          description: A list to search within.
+          schema:
+            type: string
+            default: "{name}"
+        - name: facet_?
+          in: query
+          required: false
+          description: A facet parameter, eg facet_Organism=D.melanogaster
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacetSearch'
+      tags:
+        - FacetSearch
+  /users:
+    post:
+      summary: Create a new user in the user-profile.
+      description: This service allows users of the web service to create a new user account. A user account is required for a number of operations, such as saving lists. This service allows users of the webservice to register an account, and start using these features that require authentication. The username and password provided will be able to be used for future requests, as will an API key provided with the response, which is valid for 24 hours. This is equivalent to the registration mechanism in the web-application interface. Requests to this service are rate limited by IP Address.
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: The user name of the new user. It should be an email address if possible. There must not be any user with the same username.
+          schema:
+            type: string
+        - name: password
+          in: query
+          required: true
+          description: A password to associate with the account.
+          schema:
+            type: string
+        - name: subscribe-to-list
+          in: query
+          required: false
+          description: Whether or not to subscribe to the mine's mailing list, if it has one. The username must be an email address if true.
+          schema:
+            type: boolean
+      operationId: users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+            application/xml:
+              schema:
+                type: object
+      tags:
+        - User Creation
+  /semantic-markup/dataset:
+    get:
+      summary: Get semantic markup for dataset type.
+      description: This service provides semantic markup for DataSet type.
+      operationId: semanticMarkupDataset
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: The name of the dataset.
+          schema:
+            type: string
+        - name: description
+          in: query
+          required: false
+          description: The description of the dataset.
+          schema:
+            type: string
+        - name: url
+          in: query
+          required: false
+          description: The url of the dataset.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SemanticMarkup'
+      tags:
+        - Semantic Markup
+  /semantic-markup/bioentity:
+    get:
+      summary: Get semantic markup for bioentity.
+      description: This service provides semantic markup for BioChemEntity type.
+      operationId: semanticMarkupBioEntity
+      parameters:
+        - name: type
+          in: query
+          required: true
+          description: The type of the bioentity.
+          schema:
+            type: string
+        - name: id
+          in: query
+          required: true
+          description: The primary identifier of the bioentity.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SemanticMarkup'
+      tags:
+        - Semantic Markup
+  /permanent-url:
+    get:
+      summary: Get permanent URL for data object.
+      description: This service generates permanent URL based on the class type and identifier.
+      operationId: permanentUrl
+      parameters:
+        - name: type
+          in: query
+          required: true
+          description: The type of the entity.
+          schema:
+            type: string
+        - name: id
+          in: query
+          required: true
+          description: The internal intermine ID.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermanentUrl'
+      tags:
+        - Permanent URL
+  /sequence:
+    get:
+      summary: Get a portion of a sequence-like object.
+      description: 'Get either the entire sequence of an object, or fetch an indexed sub-sequence of it. This service expects a query with a single output column that resolves to a sub-sequenceable object. For example to get a sub-sequence of the genomic sequence of the fly X chromosome in a genomic mine, the following query could be used: ``` <query model="genomic" view="Chromosome.sequence.residues"> <constraint path="Chromosome" op="LOOKUP" value="X" extraValue="D. melanogaster"/> </query> ``` '
+      operationId: sequenceGet
+      parameters:
+        - name: start
+          in: query
+          required: false
+          description: The start index.
+          schema:
+            type: integer
+            default: 0
+        - name: end
+          in: query
+          required: false
+          description: The end index.
+          schema:
+            type: integer
+        - name: query
+          in: query
+          required: true
+          description: The xml OR JSON of the query to run.
+          schema:
+            type: string
+            default: "&lt;query model=&quot;genomic&quot; view=&quot;Chromosome.sequence.residues&quot;&gt; &lt;constraint path=&quot;Chromosome&quot; op=&quot;LOOKUP&quot; value=&quot;X&quot; extraValue=&quot;D. melanogaster&quot;/&gt; &lt;/query&gt;"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sequence'
+      tags:
+        - Sequence Access
+    post:
+      summary: Get a portion of a sequence-like object.
+      description: 'Get either the entire sequence of an object, or fetch an indexed sub-sequence of it. This service expects a query with a single output column that resolves to a sub-sequenceable object. For example to get a sub-sequence of the genomic sequence of the fly X chromosome in a genomic mine, the following query could be used: ``` <query model="genomic" view="Chromosome.sequence.residues"> <constraint path="Chromosome" op="LOOKUP" value="X" extraValue="D. melanogaster"/> </query> ``` '
+      operationId: sequencePost
+      parameters:
+        - name: start
+          in: query
+          required: false
+          description: The start index.
+          schema:
+            type: integer
+            default: 0
+        - name: end
+          in: query
+          required: false
+          description: The end index.
+          schema:
+            type: integer
+        - name: query
+          in: query
+          required: true
+          description: The xml OR JSON of the query to run.
+          schema:
+            type: string
+            default: "&lt;query model=&quot;genomic&quot; view=&quot;Chromosome.sequence.residues&quot;&gt; &lt;constraint path=&quot;Chromosome&quot; op=&quot;LOOKUP&quot; value=&quot;X&quot; extraValue=&quot;D. melanogaster&quot;/&gt; &lt;/query&gt;"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sequence'
+      tags:
+        - Sequence Access
+  /query/code:
+    get:
+      summary: Get the code to run a pathquery in a given language.
+      description: This service provides the ability to generate code in one of several languages based on a pathquery provided in serialised form.
+      operationId: generatedCodeGet
+      parameters:
+        - name: lang
+          in: query
+          required: true
+          description: The language to generate code in.
+          schema:
+            type: string
+            default: py
+            enum: [pl, py, rb, js, java]
+        - name: query
+          in: query
+          required: true
+          description: The query to generate code for, in XML or JSON form.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: text
+            enum: [text, xml, json]
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema: 
+                type: object
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneratedCode'
+            application/xml:
+              schema: 
+                type: object
+      tags:
+        - Generated Code
+    post:
+      summary: Get the code to run a pathquery in a given language.
+      description: This service provides the ability to generate code in one of several languages based on a pathquery provided in serialised form.
+      operationId: generatedCodePost
+      parameters:
+        - name: lang
+          in: query
+          required: true
+          description: The language to generate code in.
+          schema:
+            type: string
+            default: py
+            enum: [pl, py, rb, js, java]
+        - name: query
+          in: query
+          required: true
+          description: The query to generate code for, in XML or JSON form.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: text
+            enum: [text, xml, json]
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema: 
+                type: object
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneratedCode'
+            application/xml:
+              schema: 
+                type: object
+      tags:
+        - Generated Code
+  /search:
+    get:
+      summary: Perform a key-word search and retrieve the results.
+      description: Run a general key-word style search over all data in the data-warehouse. Rather than a structured query for a specific type of data, this allows the user to search broadly over a range of data types, and use facetting information to restrict the search results.
+      operationId: quickSearchGet
+      parameters:
+        - name: q
+          in: query
+          required: false
+          description: The query string to search with. If absent, or blank, all results will be returned.
+          schema:
+            type: string
+        - name: size
+          in: query
+          required: false
+          description: The maximum number of records to return. If no limit is provided, up to 100 results will be returned.
+          schema:
+            type: integer
+            default: 10
+        - name: start
+          in: query
+          required: false
+          description: The index of the first result to return.
+          schema:
+            type: integer
+            default: 0
+        - name: list
+          in: query
+          required: false
+          description: A list to search within.
+          schema:
+            type: string
+            default: "{name}"
+        - name: facet_?
+          in: query
+          required: false
+          description: A facet parameter, eg facet_Organism=D.melanogaster
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuickSearch'
+      tags:
+        - QuickSearch
+    post:
+      summary: Perform a key-word search and retrieve the results.
+      description: Run a general key-word style search over all data in the data-warehouse. Rather than a structured query for a specific type of data, this allows the user to search broadly over a range of data types, and use facetting information to restrict the search results.
+      operationId: quickSearchPost
+      parameters:
+        - name: q
+          in: query
+          required: false
+          description: The query string to search with. If absent, or blank, all results will be returned.
+          schema:
+            type: string
+        - name: size
+          in: query
+          required: false
+          description: The maximum number of records to return. If no limit is provided, up to 100 results will be returned.
+          schema:
+            type: integer
+            default: 10
+        - name: start
+          in: query
+          required: false
+          description: The index of the first result to return.
+          schema:
+            type: integer
+            default: 0
+        - name: list
+          in: query
+          required: false
+          description: A list to search within.
+          schema:
+            type: string
+            default: "{name}"
+        - name: facet_?
+          in: query
+          required: false
+          description: A facet parameter, eg facet_Organism=D.melanogaster
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuickSearch'
+      tags:
+        - QuickSearch
+  /data/{type}:
+    get:
+      summary: Get Data about Objects of the Given Type.
+      description: This service allows simple access to queries against a single type. This is meant to allow for simple linking and resource-based access to InterMine data.
+      operationId: jBrowseSimpleData
+      parameters:
+        - name: type
+          in: path
+          description: The type of the object to find.
+          required: true
+          schema:
+            type: string
+            default: "{name}"
+        - name: Range
+          in: header
+          description: The range of values requested.
+          required: false
+          schema:
+            type: string
+            default: "records=0-10"
+        - name: filter
+          in: query
+          required: false
+          description: An optional filter over the objects.
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JBrowseData'
+      tags:
+        - JBrowse Simple Data Service
+  /user/whoami:
+    get:
+      summary: Get details about the authenticated user.
+      description: Retrieve information about the currently authenticated user. This can be used to display the user's name.
+      operationId: whoAmI
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhoAmI'
+      tags:
+        - Who-Am-I?
+  /user/token:
+    get:
+      summary: Get a new API key.
+      description: This service allows a user to retrieve an API token which is valid for up to 24 hours of unlimited use. The primary use case is to get an API key where the user has only username/password credentials, since the use of API keys is more secure.
+      operationId: token
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+      tags:
+        - Token
+  /templates:
+    get:
+      summary: Get the list of available templates.
+      description: Get a listing of the templates configured in an InterMine instance. Each template contains a description of its properties, defining the parameters that must be provided to run it, as well as a definition of the output format for its results. If the request is authenticated to a user, then the templates that that has access to will also be returned.
+      operationId: templatesGet
+      parameters:
+        - name: includeBroken
+          in: query
+          required: false
+          description: Whether or not to include invalid templates. Invalid templates cannot be run.
+          schema:
+            type: boolean
+            default: false
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: xml
+            enum: [xml, json]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Templates'
+      tags:
+        - Templates
+    post:
+      summary: Upload one or more templates.
+      description: Upload a set of templates to the current user profile.
+      operationId: templatesPost
+      parameters:
+        - name: xml
+          in: query
+          required: false
+          description: The xml or JSON to load, if using form parameters.
+          schema:
+            type: string
+            default: ""
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: xml
+            enum: [xml, json]
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              type: string
+            example:
+              '<template name="my-new-template">
+                    <query model="genomic" view="Gene.symbol Gene.proteins.proteinDomains.name">
+                        <constraint editable="true" path="Gene" op="LOOKUP" value="eve"/>
+                    </query>
+                </template>'
+      security: 
+        - BasicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleJsonModel'
+      tags:
+        - Templates
+  /template/upload:
+    post:
+      summary: Save a Template, or Overwrite an Existing One.
+      description: This service allows users to save templates they have authored on the server, associated with their account. The templates once saved can be used as any other template query.
+      operationId: templateUploadPost
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: One or more templates, serialised in XML or JSON format.
+          schema:
+            type: string
+            default: ""
+        - name: version
+          in: query
+          required: false
+          description: The version of the XML format.
+          schema:
+            type: integer
+            default: 2
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: text
+            enum: [text, json, html, xml]
+      security: 
+        - BasicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleJsonModel'
+      tags:
+        - Template Upload
+    get:
+      summary: Save a Template, or Overwrite an Existing One.
+      description: This service allows users to save templates they have authored on the server, associated with their account. The templates once saved can be used as any other template query.
+      operationId: templateUploadGet
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: One or more templates, serialised in XML or JSON format.
+          schema:
+            type: string
+            default: ""
+        - name: version
+          in: query
+          required: false
+          description: The version of the XML format.
+          schema:
+            type: integer
+            default: 2
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: text
+            enum: [text, json, html, xml]
+      security: 
+        - BasicAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleJsonModel'
+      tags:
+        - Template Upload
+  /user/deregistration:
+    post:
+      summary: Create a deregistration token.
+      description: This service creates a deregistration token, thus starting the process of de-registerin a user.
+      operationId: deregistrationTokenPost
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeregistrationToken'
+      tags:
+        - Deregistration Tokens
+  /user/deregistration/{uid}:
+    get:
+      summary: Get information about a deregistration token.
+      description: This service returns a representation of a deregistration token that a user has access to.
+      operationId: deregistrationTokenGet
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: The identifier of the token.
+          schema:
+            type: string
+            default: ""
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeregistrationToken'
+      tags:
+        - Deregistration Tokens
+    delete:
+      summary: Delete a deregistration token.
+      description: This service deletes a deregistration token that a user has access to, thus cancelling the request to de-register the user.
+      operationId: deregistrationTokenDelete
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: The identifier of the token.
+          schema:
+            type: string
+            default: ""
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeregistrationToken'
+      tags:
+        - Deregistration Tokens
+  /user:
+    get:
+      summary: Get information about the Current User.
+      description: This service provides information about the current user, including their user name and preferences.
+      operationId: userGet
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+      tags:
+        - User
+    delete:
+      summary: Delete the Current User.
+      description: This service deletes the current User and all their data. To ensure that you really mean to deregister a user programmatically, this service requires a deregistration token to be obtained before sending the delete request. As output it returns all of the user data it had before it was deleted.
+      operationId: userDelete
+      parameters:
+        - name: deregistrationToken
+          in: query
+          required: true
+          description: A token to ensure this is not a mistake.
+          schema:
+            type: string
+            default: ""
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+      tags:
+        - User
+  /user/preferences:
+    get:
+      summary: Get a user's preferences.
+      description: Get a complete listing of a user's preferences. This is presented as a mapping from string key to string value.
+      operationId: userPreferencesGet
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Preferences'
+      tags:
+        - User Preferences
+    post:
+      summary: Set the value of one or more preferences.
+      description: This service allows a user to store or change a key value pair associated with their account. The keys may have a particular meaning. All values will be stored and retrieved as strings.
+      operationId: userPreferencesPost
+      parameters:
+        - name: preferences
+          in: query
+          required: false
+          description: The preference to set.
+          schema:
+            type: object
+            additionalProperties:
+              type: string
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Preferences'
+      tags:
+        - User Preferences
+    put:
+      summary: Set the value of one or more preferences.
+      description: This service allows a user to store or change a key value pair associated with their account. The keys may have a particular meaning. All values will be stored and retrieved as strings.
+      operationId: userPreferencesPut
+      parameters:
+        - name: preferences
+          in: query
+          required: false
+          description: The preference to set.
+          schema:
+            type: object
+            additionalProperties:
+              type: string
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Preferences'
+      tags:
+        - User Preferences
+    delete:
+      summary: Remove one or all preferences.
+      description: Delete either a single preference from a user's set of stored preferences, or deletes all stored preference values.
+      operationId: userPreferencesDelete
+      parameters:
+        - name: key
+          in: query
+          required: false
+          description: The preference to delete. If not provided, ALL will be cleared
+          schema:
+            type: string
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Preferences'
+      tags:
+        - User Preferences
+  /user/tokens:
+    get:
+      summary: Get List of Permanent Tokens.
+      description: >-
+        Tokens are issued so that users may provide access to their private data to third parties in a more secure manner. This service lets users inspect the permanent tokens they have issued. <br/><br/> No access is provide here to other tokens (24hrs, api, day), for security and other reasons. Please look at the `Session` service for issuing new temporary tokens.
+      operationId: userTokensGet
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tokens'
+      tags:
+        - Tokens
+    post:
+      summary: Create a New Token.
+      description: >-
+        Tokens are issued so that users may provide access to their private data to third parties in a more secure manner. This service lets users create a new token they can provide to others. <br/><br/> The different token types are: <br/><br/> `day` : A token that will be valid for up to 24 hrs. <br/><br/> `once` : A token that can only be used for a single request. <br/><br/> `api` : The main Read-Write API key of the user. Generating one of these replaces the currrent key. <br/><br/> `perm` : A permanent Read-Only token that others can use.
+      operationId: userTokensPost
+      parameters:
+        - name: type
+          in: query
+          description: The type of token to issue.
+          required: false
+          schema:
+            type: string
+            default: day
+            enum: [day, once, api, perm]
+        - name: message
+          in: query
+          description: An optional message to associate with a token.
+          required: false
+          schema:
+            type: string
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+      tags:
+        - Tokens
+    delete:
+      summary: Delete all Tokens.
+      description: >-
+        Delete all permanent tokens.
+        <br/><br/> 
+        Permanent tokens are issued so that users may provide access to their private data to third parties in a more secure manner. This service lets users all the delete permanent tokens they have issued.
+      operationId: userTokensDelete
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleJsonModel'
+      tags:
+        - Tokens
+  /user/tokens/{uid}:
+    get:
+      summary: Get Token Information.
+      description: >-
+        Retrieve information about a specific permanent token.
+        <br/><br/>
+                 Permanent tokens are issued so that users may provide access
+                 to their private data to third parties in a more secure manner.
+                 This service lets users inspect a specific permanent tokens they have
+                 issued.
+      operationId: permanentTokensGet
+      parameters: 
+        - name: uid
+          in: path
+          description: The identifier of one of your tokens.
+          required: true
+          schema:
+            type: string
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermanentToken'
+      tags:
+        - Permanent Token
+    delete:
+      summary: Delete a Token.
+      description: >-
+        Delete a specific permanent token.
+        <br/><br/>
+                 Permanent tokens are issued so that users may provide access
+                 to their private data to third parties in a more secure manner.
+                 This service lets users delete permanent tokens they have
+                 issued.
+      operationId: permanentTokenDelete
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: The identifier of one of your tokens.
+          schema:
+            type: string
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleJsonModel'
+      tags:
+        - Permanent Token
+  /templates/{name}:
+    get:
+      summary: Retrieve a template by name.
+      description: >-
+        This resource retrieves a representation of a named template, returning
+                404 if the template cannot be found.
+                <br/><br/>
+                If the request is authenticated, then the templates visible to that user (created by
+                or shared with them) will be included along with publically accessible templates.
+      operationId: savedTemplateGet
+      parameters: 
+        - name: name
+          in: path
+          description: The name of the template to fetch.
+          required: true
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [xml, json]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedTemplate'
+      tags:
+        - Saved Template
+    delete:
+      summary: Delete a template by name.
+      description: >-
+        This resource exposes the ability to delete specific templates, identified
+                by name.
+                <br/><br/>
+                A user can only delete templates that they own, and must be executed
+                with `Read/Write` permission.
+      operationId: savedTemplateDelete
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: The name of the template to delete.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [xml, json]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleJsonModel'
+      tags:
+        - Saved Template
+  /template/tags:
+    get:
+      summary: Get the tags for a template, or all the tags for a given user.
+      description: Fetch an up-to-date list of all tags associated with a template, or all templates.
+      operationId: templateTagsGet
+      parameters:
+        - name: name
+          in: query
+          required: false
+          description: The name of a template whose tags to retrieve. If no template is provided, then all the tags associated with the authenticating user will be returned.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [xml, json, tab, csv]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateTags'
+      tags:
+        - Template Tags
+    post:
+      summary: Add one or more tags to a list.
+      operationId: templateTagsPost
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: The name of a template to add the tag(s) to.
+          schema:
+            type: string
+        - name: tags
+          in: query
+          required: true
+          description: The name of the tags to add. It should take to from of a semi-colon delimited concatenation of the tag names.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [xml, json, tab, csv]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateTags'
+      tags:
+        - Template Tags
+    delete:
+      summary: Delete one or more tags from a list.
+      operationId: templateTagsDelete
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: The name of a template to add the tag(s) to.
+          schema:
+            type: string
+        - name: tags
+          in: query
+          required: true
+          description: The name of the tags to remove. It should take to from of a semi-colon delimited concatenation of the tag names.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [xml, json, tab, csv]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateTags'
+      tags:
+        - Template Tags
+  /lists:
+    get:
+      summary: Find lists on the server.
+      description: >-
+        This service allows users to get back a list of
+                    lists that they have access to. The lists can be optionally
+                    be filtered on the server by name, thus returning just a single
+                    name, or if '*' wildcards are used, a subset of all lists.
+      operationId: listsGet
+      parameters: 
+        - name: name
+          in: query
+          required: false
+          description: An optional filter by name.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, html, text, csv, tab]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListsGet'
+      tags:
+        - Lists
+    post:
+      summary: Create a new list.
+      description: >-
+        This service allows users to create a new
+              list by uploading a set of identifiers.
+                The list is created by using the default settings
+                of the ID resolution mechanism and then taking
+                all the good matches.
+      operationId: listsPost
+      parameters:
+        - name: name
+          in: query
+          description: The name of the new list.
+          required: true
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: The type of the list.
+          required: true
+          schema:
+            type: string
+        - name: replaceExisting
+          in: query
+          description: Whether or not to replace any existing list of this name.
+          required: false
+          schema:
+            type: boolean
+            default: false
+            enum: [true, false]
+        - name: extraValue
+          in: query
+          description: A disambiguating value (such as organism name).
+          required: false
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      requestBody:
+        description: Identifiers for objects to add to the list, tab, comma or newline separated.
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListsPost'
+      tags:
+        - Lists
+    delete:
+      summary: Delete an existing list.
+      description: >-
+        This service allows users to delete
+                lists that belong to them.
+      operationId: listsDelete
+      parameters:
+        - name: name
+          in: query
+          description: The name of the list to delete.
+          required: true
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListsDelete'
+      tags:
+        - Lists
+  /lists/rename:
+    get:
+      summary: Rename an Existing List.
+      description: >-
+        This service allows users to change the name of an existing list that
+        they are the owner of.
+      operationId: listRenameGet
+      parameters: 
+        - name: oldname
+          in: query
+          description: The current name of the list.
+          required: true
+          schema:
+            type: string
+        - name: newname
+          in: query
+          description: The name the list should have.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRename'
+      tags:
+        - List Renaming
+    post:
+      summary: Rename an Existing List.
+      description: >-
+        This service allows users to change the name of an existing list that
+        they are the owner of.
+      operationId: listRenamePost
+      parameters: 
+        - name: oldname
+          in: query
+          description: The current name of the list.
+          required: true
+          schema:
+            type: string
+        - name: newname
+          in: query
+          description: The name the list should have.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRename'
+      tags:
+        - List Renaming
+  /lists/append:
+    post:
+      summary: Add items to an existing list by identifiers.
+      description: >-
+        This service allows users to add new items to an existing
+            list by uploading a set of identifiers. This is equivalent to
+            creating a new list from a set of identifiers, and then performing
+            the union operation on that list an existing one, if the resulant
+            list replaced the existing list.
+      operationId: listsAppendPost
+      parameters: 
+        - name: name
+          in: query
+          description: The name of the list to append to. The list must exist, and belong to you.
+          required: true
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      requestBody:
+        description: Identifiers for objects to add to the list, tab, comma or newline separated.
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAppend'
+      tags:
+        - Append to List
+  /list/tags:
+    get:
+      summary: Get the tags for a list, or all the tags for a given user.
+      description: Fetch an up-to-date list of all tags associated with a list, or all lists.
+      operationId: listTagsGet
+      parameters:
+        - name: name
+          in: query
+          required: false
+          description: The name of a list whose tags to retrieve. If no list is provided, then all the tags associated with the authenticating user will be returned.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [xml, json, tab, csv]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tags'
+      tags:
+        - List Tags
+    post:
+      summary: Add one or more tags to a list.
+      operationId: listTagsPost
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: The name of a list to add the tag(s) to..
+          schema:
+            type: string
+        - name: tags
+          in: query
+          required: true
+          description: The name of the tags to add. It should take to from of a semi-colon delimited concatenation of the tag names.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [xml, json, tab, csv]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tags'
+      tags:
+        - List Tags
+    delete:
+      summary: Delete one or more tags from a list.
+      operationId: templateTagsDelete2
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: The name of a list to add the tag(s) to.
+          schema:
+            type: string
+        - name: tags
+          in: query
+          required: true
+          description: The name of the tags to remove. It should take to from of a semi-colon delimited concatenation of the tag names.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [xml, json, tab, csv]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tags'
+      tags:
+        - List Tags
+  /lists/union:
+    get:
+      summary: Combine Two or More Lists through Union.
+      description: >-
+        This service allows users to create new lists which contain all the members
+            contained in the set of input lists. The user must have access to all the input
+            lists, but need not be the owner of any of them. A union of a single list with
+            itself may be considered a copy.
+      operationId: listsUnionGet
+      parameters: 
+        - name: name
+          in: query
+          required: true
+          description: The name of the list to create.
+          schema:
+            type: string
+        - name: lists
+          in: query
+          required: true
+          description: The name of a source list, or multiple list names concatenated with a ';' separator.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: description
+          in: query
+          required: false
+          description: A description of this new list.
+          schema:
+            type: string
+        - name: tags
+          in: query
+          required: false
+          description: A set of tags to apply to the new list.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOperations'
+      tags:
+        - List Union
+    post:
+      summary: Combine Two or More Lists through Union.
+      description: >-
+        This service allows users to create new lists which contain all the members
+            contained in the set of input lists. The user must have access to all the input
+            lists, but need not be the owner of any of them. A union of a single list with
+            itself may be considered a copy.
+      operationId: listsUnionPost
+      parameters: 
+        - name: name
+          in: query
+          required: true
+          description: The name of the list to create.
+          schema:
+            type: string
+        - name: lists
+          in: query
+          required: true
+          description: The name of a source list, or multiple list names concatenated with a ';' separator.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: description
+          in: query
+          required: false
+          description: A description of this new list.
+          schema:
+            type: string
+        - name: tags
+          in: query
+          required: false
+          description: A set of tags to apply to the new list.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOperations'
+      tags:
+        - List Union
+  /lists/subtract:
+    get:
+      summary: Subtract one List From Another.
+      description: >-
+        This service allows users to create new lists which contain only those elements
+            which are present in one set of lists, and none of those elements which are present
+            in another set of lists. This is what is typically thought of as subtraction, or more
+            technically, the asymmetric difference of two sets. The user must supply the names of
+            the lists to be used as either the source lists or the subtraction lists, as well as
+            details for the new list to be created. The user must have access to all the named lists,
+            but need not be the owner of any of them.
+      operationId: listsSubtractGet
+      parameters: 
+        - name: name
+          in: query
+          required: true
+          description: The name of the list to create.
+          schema:
+            type: string
+        - name: references
+          in: query
+          required: true
+          description: The name of a source list, or multiple list names concatenated with a ';' separator.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: subtract
+          in: query
+          required: true
+          description: The name of a list to exclude.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: description
+          in: query
+          required: false
+          description: A description of this new list.
+          schema:
+            type: string
+        - name: tags
+          in: query
+          required: false
+          description: A set of tags to apply to the new list.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOperations'
+      tags:
+        - List Substraction
+    post:
+      summary: Subtract one List From Another.
+      description: >-
+        This service allows users to create new lists which contain only those elements
+            which are present in one set of lists, and none of those elements which are present
+            in another set of lists. This is what is typically thought of as subtraction, or more
+            technically, the asymmetric difference of two sets. The user must supply the names of
+            the lists to be used as either the source lists or the subtraction lists, as well as
+            details for the new list to be created. The user must have access to all the named lists,
+            but need not be the owner of any of them.
+      operationId: listsSubtractPost
+      parameters: 
+        - name: name
+          in: query
+          required: true
+          description: The name of the list to create.
+          schema:
+            type: string
+        - name: references
+          in: query
+          required: true
+          description: The name of a source list, or multiple list names concatenated with a ';' separator.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: subtract
+          in: query
+          required: true
+          description: The name of a list to exclude.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: description
+          in: query
+          required: false
+          description: A description of this new list.
+          schema:
+            type: string
+        - name: tags
+          in: query
+          required: false
+          description: A set of tags to apply to the new list.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOperations'
+      tags:
+        - List Substraction
+  /lists/intersect:
+    post:
+      summary: Combine Two or More Lists through Intersection.
+      description: >-
+        This service allows users to create new lists which contain only those items
+            which are members of all the source lists. The user must have access to all the input
+            lists, but need not be the owner of any of them. An intersection of a single list
+            may be considered a copy.
+      operationId: listsIntersectPost
+      parameters: 
+        - name: name
+          in: query
+          required: true
+          description: The name of the list to create.
+          schema:
+            type: string
+        - name: lists
+          in: query
+          required: true
+          description: The name of a source list, or multiple list names concatenated with a ';' separator.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: description
+          in: query
+          required: false
+          description: A description of this new list.
+          schema:
+            type: string
+        - name: tags
+          in: query
+          required: false
+          description: A set of tags to apply to the new list.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOperations'
+      tags:
+        - List Intersection
+  /lists/difference:  
+    post:
+      summary: Combine Two or More Lists through Difference.
+      description: 'This service allows users to create new lists which only contain members which are not shared by an even number of lists (see: http://en.wikipedia.org/wiki/Symmetric_difference). The user must have access to all the input lists, but need not be the owner of any of them.'
+      operationId: listsDifferencePost
+      parameters: 
+        - name: name
+          in: query
+          required: true
+          description: The name of the list to create.
+          schema:
+            type: string
+        - name: lists
+          in: query
+          required: true
+          description: The name of a source list, or multiple list names concatenated with a ';' separator.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: description
+          in: query
+          required: false
+          description: A description of this new list.
+          schema:
+            type: string
+        - name: tags
+          in: query
+          required: false
+          description: A set of tags to apply to the new list.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOperations'
+      tags:
+        - List Difference
+  /widgets:
+    get:
+      summary: Get a list of the widgets available at a service.
+      description: >-
+        This service returns a list of the widgets that are available at a
+                given service. Each entry for the widget includes details of its type,
+                the kind of data it processes, and any filters it accepts.
+      operationId: widgetsGet
+      parameters:
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, xml, tab, csv]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Widgets'
+      tags:
+        - Widgets
+  /queries:
+    get:
+      summary:  Get a stored query.
+      description: >-
+        Get a query stored at the service.
+      operationId: queriesGet
+      parameters: 
+        - name: id
+          in: query
+          required: true
+          description: The id of the query to fetch.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, xml]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+      tags:
+        - Query Store
+    post:
+      summary: Store a query.
+      operationId: queriesPost
+      parameters: 
+        - name: query
+          in: query
+          required: true
+          description: The name of the list to create.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryStore'
+      tags:
+        - Query Store
+  /query/results:
+    post:
+      summary: Get results for a query against the database.
+      description: >-
+        This service provides full access to arbitrary database queries.
+            Queries are accepted in a serialised XML format, executed and returned
+            in a streaming manner. The query format is a custom subset of the capabilities
+            of SQL; see the InterMine documentation for a full description of the query XML
+            syntax.
+      operationId: queryResultsPost
+      parameters: 
+        - name: query
+          in: query
+          required: true
+          description: A definition of the query to execute in Path-Query XML format.
+          schema:
+            type: string
+        - name: version
+          in: query
+          required: false
+          description: The version of the XML format used.
+          schema:
+            type: integer
+            default: 2
+        - name: start
+          in: query
+          required: false
+          description: The index of the first result to return.
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          description: The maximum size of the result set.
+          schema:
+            type: integer
+            default: 10
+        - name: columnheaders
+          in: query
+          required: false
+          description: Include column headers. Use friendly for human readable paths. (Only for flat-file formats).
+          schema:
+            type: string
+            default: none
+            enum: [none, path, friendly]
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: tab
+            enum: [tab, csv, count, json, jsonobject, jsoncount, xml, html]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResultsJson'
+      tags:
+        - Query Results
+    get:
+      summary: Get results for a query against the database.
+      description: >-
+        This service provides full access to arbitrary database queries.
+            Queries are accepted in a serialised XML format, executed and returned
+            in a streaming manner. The query format is a custom subset of the capabilities
+            of SQL; see the InterMine documentation for a full description of the query XML
+            syntax.
+      operationId: queryResultsGet
+      parameters: 
+        - name: query
+          in: query
+          required: true
+          description: A definition of the query to execute in Path-Query XML format.
+          schema:
+            type: string
+        - name: version
+          in: query
+          required: false
+          description: The version of the XML format used.
+          schema:
+            type: integer
+            default: 2
+        - name: start
+          in: query
+          required: false
+          description: The index of the first result to return.
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          description: The maximum size of the result set.
+          schema:
+            type: integer
+            default: 10
+        - name: columnheaders
+          in: query
+          required: false
+          description: Include column headers. Use friendly for human readable paths. (Only for flat-file formats).
+          schema:
+            type: string
+            default: none
+            enum: [none, path, friendly]
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: tab
+            enum: [tab, csv, count, json, jsonobject, jsoncount, xml, html]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResultsJson'
+      tags:
+        - Query Results
+  /listswithobject:  
+    post:
+      summary: Find lists on the server containing an object.
+      description: >- 
+        This service allows users to get back a list of
+                    lists that contain a given object, either defined by an
+                    internal ID, or looked up from stable identifiers.
+                    If the request does not authenticate to a user account,
+                    then only relevant public lists will be returned.
+      operationId: listsWithObjectPost
+      parameters: 
+        - name: publicId
+          in: query
+          required: false
+          description: A stable identifier that can be used to find the object.
+          schema:
+            type: string
+        - name: id
+          in: query
+          required: false
+          description: The internal DB id (changes on each re-release).
+          schema:
+            type: integer
+        - name: type
+          in: query
+          required: false
+          description: The type of object (required if using a public id).
+          schema:
+            type: string
+        - name: extraValue
+          in: query
+          required: false
+          description: An extra value to disambiguate objects.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, html, text, csv, tab]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListsGet'
+      tags:
+        - Find Lists Containing an Object 
+    get:
+      summary: Find lists on the server containing an object.
+      description: >- 
+        This service allows users to get back a list of
+                    lists that contain a given object, either defined by an
+                    internal ID, or looked up from stable identifiers.
+                    If the request does not authenticate to a user account,
+                    then only relevant public lists will be returned.
+      operationId: listsWithObjectGet
+      parameters: 
+        - name: publicId
+          in: query
+          required: false
+          description: A stable identifier that can be used to find the object.
+          schema:
+            type: string
+        - name: id
+          in: query
+          required: false
+          description: The internal DB id (changes on each re-release).
+          schema:
+            type: integer
+        - name: type
+          in: query
+          required: false
+          description: The type of object (required if using a public id).
+          schema:
+            type: string
+        - name: extraValue
+          in: query
+          required: false
+          description: An extra value to disambiguate objects.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, html, text, csv, tab]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListsGet'
+      tags:
+        - Find Lists Containing an Object
+  /lists/jaccard-index:  
+    post:
+      summary: Measure similarity of lists using Jaccard Index.
+      description: 'This service compares the named list with all available lists. (public lists and private ones if the user is logged in). Its returns the name of each list compared plus a number representing the Jaccard Index. See https://en.wikipedia.org/wiki/Jaccard_index'
+      operationId: jaccardIndexPost
+      parameters: 
+        - name: list
+          in: query
+          required: false
+          description: The name of the list.
+          schema:
+            type: string
+        - name: ids
+          in: query
+          required: false
+          description: The list of InterMine IDs.
+          schema:
+            type: string
+        - name: min
+          in: query
+          required: false
+          description: If the Jaccard Index is lower than this value, discard.
+          schema:
+            type: number
+            default: 0.05
+        - name: type
+          in: query
+          required: false
+          description: The type of InterMine objects (if providing IDs).
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JaccardIndex'
+      tags:
+        - Jaccard Index  
+    get:
+      summary: Measure similarity of lists using Jaccard Index.
+      description: 'This service compares the named list with all available lists. (public lists and private ones if the user is logged in). Its returns the name of each list compared plus a number representing the Jaccard Index. See https://en.wikipedia.org/wiki/Jaccard_index'
+      operationId: jaccardIndexGet
+      parameters: 
+        - name: list
+          in: query
+          required: false
+          description: The name of the list.
+          schema:
+            type: string
+        - name: ids
+          in: query
+          required: false
+          description: The list of InterMine IDs.
+          schema:
+            type: string
+        - name: min
+          in: query
+          required: false
+          description: If the Jaccard Index is lower than this value, discard.
+          schema:
+            type: number
+            default: 0.05
+        - name: type
+          in: query
+          required: false
+          description: The type of InterMine objects (if providing IDs).
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JaccardIndex'
+      tags:
+        - Jaccard Index
+  /lists/shares:
+    post:
+      summary: Authorise another user to access a list.
+      description: >-
+        This service provides a means for authorising another user to access a list. To
+            share a list the user making the request must be the owner of the list and you must
+            know the username of the user you wish to share with. If you do not know the username
+            of the user to share with, then the user should issue an invitation instead. The user
+            the list is shared with must exist and the list must not already be shared with them.
+            <br/><br/>
+            The service returns information detailing whom the list in question is currently
+            shared with.
+      operationId: listSharesPost
+      parameters:
+        - name: list
+          in: query
+          required: true
+          description: The list of yours you wish to share.
+          schema:
+            type: string
+        - name: with
+          in: query
+          required: true
+          description: The username of the user who will have access.
+          schema:
+            type: string
+        - name: notify
+          in: query
+          required: false
+          description: Whether or not to send an email to the user you are sharing with.
+          schema:
+            type: boolean
+            default: false
+            enum: [false, true]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSharingPost'
+      tags:
+        - List Sharing
+    get:
+      summary: Retrieve information about which lists are shared with and by whom.
+      description: >-
+        Get information about each list that is shared by or with the authenticating
+            user. The service returns a map with two keys "sharedByUser" and "sharedWithUser"
+            which are themselves each maps, with list names as keys, and either lists of
+            users with access as values, or the name of the original owner as values.
+      operationId: listSharesGet
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSharingGet'
+      tags:
+        - List Sharing
+    delete:
+      summary: Rescind the Permission Granted to a User to Access a List.
+      description: >-
+        Stop a user from being able to access a list that you own. This service allows a user
+            to remove a user's previously granted permission to view the contents of a list.
+            <br/><br/>
+            Other than a json results envelope no meaningful results are returned, and the caller
+            should simply check for a successful response.
+      operationId: listSharesDelete
+      parameters:
+        - name: list
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: with
+          in: query
+          required: true
+          schema:
+            type: string
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleJsonModel'
+      tags:
+        - List Sharing
+  /lists/invitations:
+    post:
+      summary:  Invite another user to share a list.
+      description: >-
+        This service allows users to share one of their lists with another user.
+              This allows read-only access to the given list, allowing it to be used in
+              queries, exported, etc. You should only do this if you trust the other
+              party with your data.
+              <br/><br/>
+              Users can be designated by their username, display-name (if set) or by
+              and email address. If the email address is not registered with a user in
+              the system, an invitation will be sent to that address, with a code that
+              allows the user to activate the list share.
+      operationId: listInvitationsPost
+      parameters: 
+        - name: list
+          in: query
+          required: true
+          description: The list of yours you wish to share.
+          schema:
+            type: string
+        - name: to
+          in: query
+          required: false
+          description: The email address of the user to invite to share a list.
+          schema:
+            type: string
+        - name: notify
+          in: query
+          required: false
+          description: Whether or not to send an email to the invitee. The invitee value must be an email address if true.
+          schema:
+            type: boolean
+            default: false
+            enum: [true, false]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListInvitationSingle'
+      tags:
+        - List Invitations
+    get:
+      summary: Details of all outstanding invitations.
+      description: This service returns a description of all the outstanding list invitations
+            for a user on the system.
+      operationId: listInvitationsGet
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListInvitationMultiple'
+      tags:
+        - List Invitations
+  /lists/invitations/{uid}:
+    get:
+      summary: Details of a single invitation.
+      description: >-
+        This service returns details of a single invitation on the system.
+      operationId: listsInvitationsUidGet
+      parameters: 
+        - name: uid
+          in: path
+          required: true
+          description: The identifier of the invitation - a 20 character unique string.
+          schema:
+            type: string
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListInvitationSingle'
+      tags:
+        - List Invitations
+    put:
+      summary: Declare the acceptance of an invitation.
+      description: >-
+        The service accepts the invitation, activating the share. It must be accessed
+              by the user it was sent to.
+      operationId: listsInvitationsUidPut
+      parameters: 
+        - name: uid
+          in: path
+          required: true
+          description: The identifier of the invitation - a 20 character unique string.
+          schema:
+            type: string
+        - name: accepted
+          in: query
+          required: true
+          description: Whether or not this invitation is accepted or not.
+          schema:
+            type: boolean
+            enum: [true, false]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListInvitationSingle'
+      tags:
+        - List Invitations
+  /user/queries/{name}:
+    delete:
+      summary: Delete a saved query by name.
+      description: >-
+        This resource exposes the ability to delete specific saved queries, identified
+                by name.
+                <br/><br/>
+                A user can only delete queries that they own, and must be executed
+                with `Read/Write` permission.
+      operationId: userQueriesNameDelete
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: The name of the query to delete.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, xml]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleJsonModel'
+      tags:
+        - Saved Query
+  /user/queries:
+    get:
+      summary:  Get the Saved Queries You have Access to.
+      description: >-
+        This resource represents access to the set of saved-queries
+                accessible to a user. Saved queries are just normal queries, but
+                persisted with the user's account.
+      operationId: userQueriesGet
+      parameters: 
+        - name: filter
+          in: query
+          required: false
+          description: An optional filter by name, allowing wildcards.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, xml]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedQueries'
+      tags:
+        - Saved Queries
+    post:
+      summary: Upload New Queries to be Saved into a User's Profile.
+      description: >-
+        This resource allows users to upload queries to be saved into their profile.
+                Queries that the user uploads should all be valid, and ideally have names. If they
+                do not have names, names will be assigned to them.
+      operationId: userQueriesPost
+      parameters:
+        - name: xml
+          in: query
+          required: false
+          description: The queries to upload, if using form parameters.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: text
+            enum: [text, json, xml, tab, csv]
+      requestBody:
+        description: The queries to upload. If using body content.
+        required: false
+        content:
+          application/xml:
+            schema:
+              type: string
+            example: >-
+              <query model="genomic" view="Gene.symbol Gene.proteins.uniprotName">
+                    <constraint path="Gene" op="LOOKUP" value="eve"/>
+              </query>
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedQueries'
+      tags:
+        - Saved Queries
+    put:
+      summary: Update Existing Queries in a User's Profile.
+      description: >-
+        This resource allows users to upload queries to be saved into their profile.
+                Queries that the user uploads should all be valid, and ideally have names. If they
+                do not have names, names will be assigned to them. If queries with the same name
+                already exist, they will be over-written. This provides a mechanism for updating
+                the value of saved queries on a service.
+      operationId: userQueriesPut
+      parameters: 
+        - name: query
+          in: query
+          required: false
+          description: The queries to upload, if using form parameters.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: text
+            enum: [text, json, xml, tab, csv]
+      requestBody:
+        description: The queries to upload. If using body content.
+        required: false
+        content:
+          application/xml:
+            schema:
+              type: string
+            example: >-
+              <query model="genomic" view="Gene.symbol Gene.proteins.uniprotName">
+                    <constraint path="Gene" op="LOOKUP" value="eve"/>
+              </query>
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedQueries'
+      tags:
+        - Saved Queries
+    delete:
+      summary: Delete a saved query by name.
+      description: >-
+        This resource exposes the ability to delete specific saved queries, identified
+                by name.
+                <br/><br/>
+                A user can only delete queries that they own, and must be executed
+                with `Read/Write` permission.
+      operationId: userQueriesDelete
+      parameters: 
+        - name: name
+          in: query
+          required: true
+          description: The name of the query to delete.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, xml]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleJsonModel'
+      tags:
+        - Saved Queries
+  /query/upload:
+    post:
+      summary: Save queries to a user account on the server.
+      description: >-
+        This service provides the facility to submit one or more queries
+                    and save it/them for future reference to a user account on the server.
+      operationId: queryUploadPost
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: A definition of the query/ies to save in Path-Query XML or JSON format.
+          schema:
+            type: string
+        - name: version
+          in: query
+          required: false
+          description: The version of the path-qeury format being used.
+          schema:
+            type: integer
+            default: 2
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedQueries'
+      tags:
+        - Save Query
+    get:
+      summary: Save queries to a user account on the server.
+      description: >-
+        This service provides the facility to submit one or more queries
+                    and save it/them for future reference to a user account on the server.
+      operationId: queryUploadGet
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: A definition of the query/ies to save in Path-Query XML or JSON format.
+          schema:
+            type: string
+        - name: version
+          in: query
+          required: false
+          description: The version of the path-qeury format being used.
+          schema:
+            type: integer
+            default: 2
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedQueries'
+      tags:
+        - Save Query
+  /ids:
+    post:
+      summary: Start a New ID Resolution Job on the Server.
+      description: >- 
+        New ID resolution jobs are created by posting a representation of the job to this
+        service. Jobs are run asynchronously, so this service simply submits the
+        job, and returns the identifier of the job, so that its results and status
+        may be polled later.
+        <br/><br/>
+        A job is a data structure (represented as `json`) that satisfies the
+        following [json-schema](http://json-schema.org/) schema:
+        <br/><br/>
+        
+        {  
+          &emsp;"type":  "object", \
+          &emsp;"required": ["identifiers", "type"], \
+          &emsp;"properties": { \
+            &emsp;&emsp;"identifiers": { \
+              &emsp;&emsp;&emsp;"type": "array", \
+              &emsp;&emsp;&emsp;"items": { "type": "string" }, \
+              &emsp;&emsp;&emsp;"minItems": 1, \
+              &emsp;&emsp;&emsp;"uniqueItems": true \
+            &emsp;&emsp;}, \
+            &emsp;"type":          { "type": "string"  }, \
+            &emsp;"extra":         { "type": "string"  }, \
+            &emsp;"caseSensitive": { "type": "boolean" }, \
+            &emsp;"wildCards":     { "type": "boolean" } \
+          &emsp;} \
+        } 
+        
+      operationId: idsPost
+      requestBody:
+        description: A representation of the job. This must include a list of identifiers to resolve, and the type of object these ids are meant to resolve to.
+        required: false
+        content:
+          application/json:
+            schema:
+              type: string
+            example: >-
+              {
+                  "identifiers": ["eve", "zen", "bib"],
+                  "type": "Gene",
+                  "caseSensitive": true,
+                  "wildCards": true,
+                  "extra": "D. melanogaster"
+              }
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdResolutionPost'
+      tags:
+        - Id Resolution
+  /ids/{uid}/status:
+    get:
+      summary: Check the Status of a Given Job.
+      description: >-
+        Get a representation of the status of job.
+      operationId: idsStatusGet
+      parameters: 
+        - name: uid
+          in: path
+          required: true
+          description: The unique identifier of the job.
+          schema:
+            type: string
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdResolutionStatus'
+      tags:
+        - Id Resolution
+  /ids/{uid}/results:
+    get:
+      summary: Get the Results of a Given Job
+      description: >-
+        Get the full results of running a specific job
+      operationId: idsResultsGet
+      parameters: 
+        - name: uid
+          in: path
+          required: true
+          description: The unique identifier of the job.
+          schema:
+            type: string
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdResolutionResults'
+      tags:
+        - Id Resolution
+  /ids/{uid}:
+    delete:
+      summary: Delete a given job from the server.
+      description: >-
+        Each job should be removed from the server when the user has finished inspecting the results.
+      operationId: idsDelete
+      parameters: 
+        - name: uid
+          in: path
+          required: true
+          description: The unique identifier of the job.
+          schema:
+            type: string
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleJsonModel'
+      tags:
+        - Id Resolution
+  /path/values:
+    get:
+      summary: Get the possible values a path may have.
+      description: >-
+        This service provides the possible values that a path may represent
+               in the database. This functionality is expected to primarily useful for
+               applications providing completion and suggestions for user-input.
+      operationId: pathValuesGet
+      parameters: 
+        - name: path
+          in: path
+          required: true
+          description: The path whose possible values are requested.
+          schema:
+            type: string
+        - name: typeConstraints
+          in: query
+          required: false
+          description: A json object mapping which describes the type constraints on this path.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, jsoncount, count]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PossibleValues'
+      tags:
+        - Possible Values
+    post:
+      summary: Get the possible values a path may have.
+      description: >-
+        This service provides the possible values that a path may represent
+               in the database. This functionality is expected to primarily useful for
+               applications providing completion and suggestions for user-input.
+      operationId: pathValuesPost
+      parameters: 
+        - name: path
+          in: path
+          required: true
+          description: The path whose possible values are requested.
+          schema:
+            type: string
+        - name: typeConstraints
+          in: query
+          required: false
+          description: A json object mapping which describes the type constraints on this path.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, jsoncount, count]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PossibleValues'
+      tags:
+        - Possible Values
+  /query/tolist:
+    post:
+      summary: Save the result set of a query as a list on the server.
+      description: >-
+        This service provides the facility to submit a query and create a new list
+        whose contents shall be the result set defined by running the query.
+        <br/><br/>
+        This facility places a couple of restrictions on the query itself, namely that
+        the view list may only contain a single item, which can refer to any attribute
+        of an object. The attribute itself will be ignored, and the object itself
+        will be selected. For this reason, one might choose to always select the `.id`
+        attribute when using this service.
+      operationId: queryToListPost
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: A definition of the query to execute in Path-Query XML or JSON format.
+          schema:
+            type: string
+        - name: name
+          in: query
+          required: true
+          description: The name for the new list. There must be no existing list of this name.
+          schema:
+            type: string
+        - name: description
+          in: query
+          required: false
+          description: A description to attach to the new list.
+          schema:
+            type: string
+        - name: tags
+          in: query
+          required: false
+          description: A set of tags to use to categorise the new list separated by semicolon(;).
+          schema:
+            type: string
+        - name: replaceExisting
+          in: query
+          required: false
+          description: Whether or not to replace any existing list of this name.
+          schema:
+            type: boolean
+            enum: [true, false]
+            default: false
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToList'
+      tags:
+        - Create List from Query
+    get:
+      summary: Save the result set of a query as a list on the server.
+      description: >-
+        This service provides the facility to submit a query and create a new list
+        whose contents shall be the result set defined by running the query.
+        <br/><br/>
+        This facility places a couple of restrictions on the query itself, namely that
+        the view list may only contain a single item, which can refer to any attribute
+        of an object. The attribute itself will be ignored, and the object itself
+        will be selected. For this reason, one might choose to always select the `.id`
+        attribute when using this service.
+      operationId: queryToListGet
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: A definition of the query to execute in Path-Query XML or JSON format.
+          schema:
+            type: string
+        - name: name
+          in: query
+          required: true
+          description: The name for the new list. There must be no existing list of this name.
+          schema:
+            type: string
+        - name: description
+          in: query
+          required: false
+          description: A description to attach to the new list.
+          schema:
+            type: string
+        - name: tags
+          in: query
+          required: false
+          description: A set of tags to use to categorise the new list separated by semicolon(;).
+          schema:
+            type: string
+        - name: replaceExisting
+          in: query
+          required: false
+          description: Whether or not to replace any existing list of this name.
+          schema:
+            type: boolean
+            enum: [true, false]
+            default: false
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToList'
+      tags:
+        - Create List from Query
+  /query/append/tolist:
+    get:
+      summary:  Add the result set of a query to a list on the server.
+      description: >-
+        This service provides the facility to submit a query and add the objects
+                  contained in its result set to a list that already exists on the server. This
+                  facility places a couple of restrictions on the query itself, namely that
+                  the view list may only contain a single item, which should refer to the
+                  internal id attribute of an object in the query.
+      operationId: queryAppendToListGet
+      parameters: 
+        - name: query
+          in: query
+          required: true
+          description: A definition of the query to execute in Path-Query XML or JSON format.
+          schema:
+            type: string 
+        - name: name
+          in: query
+          required: true
+          description: The list to append items to.
+          schema:
+            type: string
+        - name: tags
+          in: query
+          required: false
+          description: A set of tags to use to categorise the new list separated by semicolon(;).
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToList'
+      tags:
+        - Add to List from Query
+    post:
+      summary:  Add the result set of a query to a list on the server.
+      description: >-
+        This service provides the facility to submit a query and add the objects
+                  contained in its result set to a list that already exists on the server. This
+                  facility places a couple of restrictions on the query itself, namely that
+                  the view list may only contain a single item, which should refer to the
+                  internal id attribute of an object in the query.
+      operationId: queryAppendToListPost
+      parameters: 
+        - name: query
+          in: query
+          required: true
+          description: A definition of the query to execute in Path-Query XML or JSON format.
+          schema:
+            type: string 
+        - name: name
+          in: query
+          required: true
+          description: The list to append items to.
+          schema:
+            type: string
+        - name: tags
+          in: query
+          required: false
+          description: A set of tags to use to categorise the new list separated by semicolon(;).
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToList'
+      tags:
+        - Add to List from Query
+  /template/results:
+    post:
+      summary: Get the results from running a template with a given set of parameters.
+      description: >-
+        Templates are predefined parameterised queries which may be run by supplying values and
+        operators for the available editable constraints. The editable constraints vary from
+        template to template, so knowledge of these (obtainable by calls to `/templates`)
+        is required to use this service correctly.
+        <br/><br/>
+        Users should provide parameters of the form `constraint{N}`, `op{N}`, `value{N}`
+        and `extra{N}` for each editable contraint, where `N` represents a number to group
+        the values. The value of the `constraint{N}` parameter serves to identify
+        the constraint, and may not be changed. Values for `op{N}` and `value{N}` must be
+        given, and may be anything the user requires.
+        <br/><br/>
+        To run a template, for example which has the following editable constraints: 
+        <br/>
+        ```
+        <constraint path="Gene.symbol" op="=" value="eve" editable="true"/>
+        <constraint path="Gene.length" op="&gt;" value="1000" editable="true"/>
+        ```
+        <br/><br/>
+        Then the user should supply the following parameters to run it with the above values:
+        <br/><br/>
+        | Parameter &nbsp; &nbsp; &nbsp; &nbsp; | Value &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        |----------------------|------------------&nbsp; |<br/>
+        | constraint1 &nbsp; &nbsp; &nbsp; &nbsp;| Gene.symbol      |<br/>
+        | op1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | eq &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        | value1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | eve &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;|<br/>
+        | constraint2 &nbsp; &nbsp; &nbsp; &nbsp;| Gene.length &nbsp;|<br/>
+        | op2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | gt &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        | value2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | 1000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/><br/>
+        
+        The value of the number used to identify each constraint is ignored - it must however be
+        consistent for each parameter. One set of template constraint parameters is required
+        for each editable constraint on the query. These are not required for optional constraints.
+      operationId: templateResultsPost
+      parameters: 
+        - name: name
+          in: query
+          required: true
+          description: The name of the template to run.
+          schema:
+            type: string
+        - name: constraint1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint paths.
+          schema:
+            type: string
+        - name: op1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint operators.
+          schema:
+            type: string
+        - name: value1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint values.
+          schema:
+            type: string
+        - name: code1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint codes. Codes are only required if two constraints have the same path.
+          schema:
+            type: string
+        - name: extra1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply extra constraint values (used by LOOKUP constraints).
+          schema:
+            type: string
+        - name: start
+          in: query
+          required: false
+          description: The index of the first result to return.
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          description: The maximum size of the result set.
+          schema:
+            type: integer
+            default: 10
+        - name: columnheaders
+          in: query
+          required: false
+          description: Include column headers. Use friendly for human readable paths. (Only for flat-file formats).
+          schema:
+            type: string
+            default: none
+            enum: [none, path, friendly]
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: tab
+            enum: [tab, csv, count, json, jsonobject, jsoncount, xml, html]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResultsJson'
+      tags:
+        - Template Results
+    get:
+      summary: Get the results from running a template with a given set of parameters.
+      description: >-
+        Templates are predefined parameterised queries which may be run by supplying values and
+        operators for the available editable constraints. The editable constraints vary from
+        template to template, so knowledge of these (obtainable by calls to `/templates`)
+        is required to use this service correctly.
+        <br/><br/>
+        Users should provide parameters of the form `constraint{N}`, `op{N}`, `value{N}`
+        and `extra{N}` for each editable contraint, where `N` represents a number to group
+        the values. The value of the `constraint{N}` parameter serves to identify
+        the constraint, and may not be changed. Values for `op{N}` and `value{N}` must be
+        given, and may be anything the user requires.
+        <br/><br/>
+        To run a template, for example which has the following editable constraints: 
+        <br/>
+        ```
+        <constraint path="Gene.symbol" op="=" value="eve" editable="true"/>
+        <constraint path="Gene.length" op="&gt;" value="1000" editable="true"/>
+        ```
+        <br/><br/>
+        Then the user should supply the following parameters to run it with the above values:
+        <br/><br/>
+        | Parameter &nbsp; &nbsp; &nbsp; &nbsp; | Value &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        |----------------------|------------------&nbsp; |<br/>
+        | constraint1 &nbsp; &nbsp; &nbsp; &nbsp;| Gene.symbol      |<br/>
+        | op1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | eq &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        | value1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | eve &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;|<br/>
+        | constraint2 &nbsp; &nbsp; &nbsp; &nbsp;| Gene.length &nbsp;|<br/>
+        | op2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | gt &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        | value2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | 1000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/><br/>
+        
+        The value of the number used to identify each constraint is ignored - it must however be
+        consistent for each parameter. One set of template constraint parameters is required
+        for each editable constraint on the query. These are not required for optional constraints.
+      operationId: templateResultsGet
+      parameters: 
+        - name: name
+          in: query
+          required: true
+          description: The name of the template to run.
+          schema:
+            type: string
+        - name: constraint1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint paths.
+          schema:
+            type: string
+        - name: op1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint operators.
+          schema:
+            type: string
+        - name: value1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint values.
+          schema:
+            type: string
+        - name: code1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint codes. Codes are only required if two constraints have the same path.
+          schema:
+            type: string
+        - name: extra1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply extra constraint values (used by LOOKUP constraints).
+          schema:
+            type: string
+        - name: start
+          in: query
+          required: false
+          description: The index of the first result to return.
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          description: The maximum size of the result set.
+          schema:
+            type: integer
+            default: 10
+        - name: columnheaders
+          in: query
+          required: false
+          description: Include column headers. Use friendly for human readable paths. (Only for flat-file formats).
+          schema:
+            type: string
+            default: none
+            enum: [none, path, friendly]
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: tab
+            enum: [tab, csv, count, json, jsonobject, jsoncount, xml, html]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResultsJson'
+      tags:
+        - Template Results
+  /template/tolist:
+    post:
+      summary: Create a List from the Output of a Template.
+      description: >-
+        This service allows the user to create a list from the result set of running a template
+        with a given set of parameters. The parameters for running the template are the same as when
+        requesting results (see documentation for `template-results`), and in addition to these
+        parameters the user needs to supply a name and optional description for the list to be created.
+        <br/><br/>
+        To define which part of the template results to use, the user must supply a path parameter which
+        indicates a valid column from the output to be used.
+        <br/><br/>
+        Users should provide parameters of the form `constraint{N}`, `op{N}`, `value{N}`
+        and `extra{N}` for each editable contraint, where `N` represents a number to group
+        the values. The value of the `constraint{N}` parameter serves to identify
+        the constraint, and may not be changed. Values for `op{N}` and `value{N}` must be
+        given, and may be anything the user requires.
+        <br/><br/>
+        To run a template, for example which has the following editable constraints: 
+        <br/>
+        ```
+        <constraint path="Gene.symbol" op="=" value="eve" editable="true"/>
+        <constraint path="Gene.length" op="&gt;" value="1000" editable="true"/>
+        ```
+        <br/><br/>
+        Then the user should supply the following parameters to run it with the above values:
+        <br/><br/>
+        | Parameter &nbsp; &nbsp; &nbsp; &nbsp; | Value &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        |----------------------|------------------&nbsp; |<br/>
+        | constraint1 &nbsp; &nbsp; &nbsp; &nbsp;| Gene.symbol      |<br/>
+        | op1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | eq &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        | value1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | eve &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;|<br/>
+        | constraint2 &nbsp; &nbsp; &nbsp; &nbsp;| Gene.length &nbsp;|<br/>
+        | op2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | gt &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        | value2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | 1000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/><br/>
+        
+        The value of the number used to identify each constraint is ignored - it must however be
+        consistent for each parameter. One set of template constraint parameters is required
+        for each editable constraint on the query. These are not required for optional constraints.
+      operationId: templateToListPost
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: The name of the template to run.
+          schema:
+            type: string
+        - name: path
+          in: query
+          required: true
+          description: The path to use to compose the results. This should be one of the selected view paths.
+          schema:
+            type: string
+        - name: listName
+          in: query
+          required: true
+          description: The name for the new list. There must be no existing list of this name.
+          schema:
+            type: string
+        - name: constraint1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint paths.
+          schema:
+            type: string
+        - name: op1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint operators.
+          schema:
+            type: string
+        - name: value1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint values.
+          schema:
+            type: string
+        - name: code1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint codes. Codes are only required if two constraints have the same path.
+          schema:
+            type: string
+        - name: extra1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply extra constraint values (used by LOOKUP constraints).
+          schema:
+            type: string
+        - name: description
+          in: query
+          required: false
+          description: A description to attach to the new list.
+          schema:
+            type: string
+        - name: tags
+          in: query
+          required: false
+          description: A set of tags to use to categorise the new list separated by semicolon(;).
+          schema:
+            type: string
+        - name: replaceExisting
+          in: query
+          required: false
+          description: Whether or not to replace any existing list of this name.
+          schema:
+            type: boolean
+            enum: [true, false]
+            default: false
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToList'
+      tags:
+        - Template to list
+    get:
+      summary: Create a List from the Output of a Template.
+      description: >-
+        This service allows the user to create a list from the result set of running a template
+        with a given set of parameters. The parameters for running the template are the same as when
+        requesting results (see documentation for `template-results`), and in addition to these
+        parameters the user needs to supply a name and optional description for the list to be created.
+        <br/><br/>
+        To define which part of the template results to use, the user must supply a path parameter which
+        indicates a valid column from the output to be used.
+        <br/><br/>
+        Users should provide parameters of the form `constraint{N}`, `op{N}`, `value{N}`
+        and `extra{N}` for each editable contraint, where `N` represents a number to group
+        the values. The value of the `constraint{N}` parameter serves to identify
+        the constraint, and may not be changed. Values for `op{N}` and `value{N}` must be
+        given, and may be anything the user requires.
+        <br/><br/>
+        To run a template, for example which has the following editable constraints: 
+        <br/>
+        ```
+        <constraint path="Gene.symbol" op="=" value="eve" editable="true"/>
+        <constraint path="Gene.length" op="&gt;" value="1000" editable="true"/>
+        ```
+        <br/><br/>
+        Then the user should supply the following parameters to run it with the above values:
+        <br/><br/>
+        | Parameter &nbsp; &nbsp; &nbsp; &nbsp; | Value &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        |----------------------|------------------&nbsp; |<br/>
+        | constraint1 &nbsp; &nbsp; &nbsp; &nbsp;| Gene.symbol      |<br/>
+        | op1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | eq &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        | value1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | eve &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;|<br/>
+        | constraint2 &nbsp; &nbsp; &nbsp; &nbsp;| Gene.length &nbsp;|<br/>
+        | op2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | gt &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        | value2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | 1000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/><br/>
+        
+        The value of the number used to identify each constraint is ignored - it must however be
+        consistent for each parameter. One set of template constraint parameters is required
+        for each editable constraint on the query. These are not required for optional constraints.
+      operationId: templateToListGet
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: The name of the template to run.
+          schema:
+            type: string
+        - name: path
+          in: query
+          required: true
+          description: The path to use to compose the results. This should be one of the selected view paths.
+          schema:
+            type: string
+        - name: listName
+          in: query
+          required: true
+          description: The name for the new list. There must be no existing list of this name.
+          schema:
+            type: string
+        - name: constraint1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint paths.
+          schema:
+            type: string
+        - name: op1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint operators.
+          schema:
+            type: string
+        - name: value1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint values.
+          schema:
+            type: string
+        - name: code1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint codes. Codes are only required if two constraints have the same path.
+          schema:
+            type: string
+        - name: extra1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply extra constraint values (used by LOOKUP constraints).
+          schema:
+            type: string
+        - name: description
+          in: query
+          required: false
+          description: A description to attach to the new list.
+          schema:
+            type: string
+        - name: tags
+          in: query
+          required: false
+          description: A set of tags to use to categorise the new list separated by semicolon(;).
+          schema:
+            type: string
+        - name: replaceExisting
+          in: query
+          required: false
+          description: Whether or not to replace any existing list of this name.
+          schema:
+            type: boolean
+            enum: [true, false]
+            default: false
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToList'
+      tags:
+        - Template to list
+  /template/append/tolist:
+    post:
+      summary: Add items to a list from a set of results from running a template.
+      description: >-
+        This service allows the user to add items to a list from the result set of running a template
+        with a given set of parameters. The parameters for running the template are the same as when
+        requesting results, and in addition to these parameters the user needs to supply the name
+        of a list to append the results to.
+        <br/><br/>
+        To define which part of the template results to use, the user must supply a path parameter which
+        indicates a valid column from the output to be used.
+        <br/><br/>
+        Users should provide parameters of the form `constraint{N}`, `op{N}`, `value{N}`
+        and `extra{N}` for each editable contraint, where `N` represents a number to group
+        the values. The value of the `constraint{N}` parameter serves to identify
+        the constraint, and may not be changed. Values for `op{N}` and `value{N}` must be
+        given, and may be anything the user requires.
+        <br/><br/>
+        To run a template, for example which has the following editable constraints: 
+        <br/>
+        ```
+        <constraint path="Gene.symbol" op="=" value="eve" editable="true"/>
+        <constraint path="Gene.length" op="&gt;" value="1000" editable="true"/>
+        ```
+        <br/><br/>
+        Then the user should supply the following parameters to run it with the above values:
+        <br/><br/>
+        | Parameter &nbsp; &nbsp; &nbsp; &nbsp; | Value &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        |----------------------|------------------&nbsp; |<br/>
+        | constraint1 &nbsp; &nbsp; &nbsp; &nbsp;| Gene.symbol      |<br/>
+        | op1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | eq &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        | value1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | eve &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;|<br/>
+        | constraint2 &nbsp; &nbsp; &nbsp; &nbsp;| Gene.length &nbsp;|<br/>
+        | op2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | gt &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        | value2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | 1000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/><br/>
+        
+        The value of the number used to identify each constraint is ignored - it must however be
+        consistent for each parameter. One set of template constraint parameters is required
+        for each editable constraint on the query. These are not required for optional constraints.
+      operationId: templateAppendToListPost
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: The name of the template to run.
+          schema:
+            type: string
+        - name: path
+          in: query
+          required: true
+          description: The path to use to compose the results. This should be one of the selected view paths.
+          schema:
+            type: string
+        - name: listName
+          in: query
+          required: true
+          description: The name for the new list. There must be no existing list of this name.
+          schema:
+            type: string
+        - name: constraint1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint paths.
+          schema:
+            type: string
+        - name: op1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint operators.
+          schema:
+            type: string
+        - name: value1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint values.
+          schema:
+            type: string
+        - name: code1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint codes. Codes are only required if two constraints have the same path.
+          schema:
+            type: string
+        - name: extra1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply extra constraint values (used by LOOKUP constraints).
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToList'
+      tags:
+        - Append to List from Template Results
+    get:
+      summary: Add items to a list from a set of results from running a template.
+      description: >-
+        This service allows the user to add items to a list from the result set of running a template
+        with a given set of parameters. The parameters for running the template are the same as when
+        requesting results, and in addition to these parameters the user needs to supply the name
+        of a list to append the results to.
+        <br/><br/>
+        To define which part of the template results to use, the user must supply a path parameter which
+        indicates a valid column from the output to be used.
+        <br/><br/>
+        Users should provide parameters of the form `constraint{N}`, `op{N}`, `value{N}`
+        and `extra{N}` for each editable contraint, where `N` represents a number to group
+        the values. The value of the `constraint{N}` parameter serves to identify
+        the constraint, and may not be changed. Values for `op{N}` and `value{N}` must be
+        given, and may be anything the user requires.
+        <br/><br/>
+        To run a template, for example which has the following editable constraints: 
+        <br/>
+        ```
+        <constraint path="Gene.symbol" op="=" value="eve" editable="true"/>
+        <constraint path="Gene.length" op="&gt;" value="1000" editable="true"/>
+        ```
+        <br/><br/>
+        Then the user should supply the following parameters to run it with the above values:
+        <br/><br/>
+        | Parameter &nbsp; &nbsp; &nbsp; &nbsp; | Value &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        |----------------------|------------------&nbsp; |<br/>
+        | constraint1 &nbsp; &nbsp; &nbsp; &nbsp;| Gene.symbol      |<br/>
+        | op1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | eq &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        | value1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | eve &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;|<br/>
+        | constraint2 &nbsp; &nbsp; &nbsp; &nbsp;| Gene.length &nbsp;|<br/>
+        | op2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | gt &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/>
+        | value2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | 1000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |<br/><br/>
+        
+        The value of the number used to identify each constraint is ignored - it must however be
+        consistent for each parameter. One set of template constraint parameters is required
+        for each editable constraint on the query. These are not required for optional constraints.
+      operationId: templateAppendToListGet
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: The name of the template to run.
+          schema:
+            type: string
+        - name: path
+          in: query
+          required: true
+          description: The path to use to compose the results. This should be one of the selected view paths.
+          schema:
+            type: string
+        - name: listName
+          in: query
+          required: true
+          description: The name for the new list. There must be no existing list of this name.
+          schema:
+            type: string
+        - name: constraint1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint paths.
+          schema:
+            type: string
+        - name: op1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint operators.
+          schema:
+            type: string
+        - name: value1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint values.
+          schema:
+            type: string
+        - name: code1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply constraint codes. Codes are only required if two constraints have the same path.
+          schema:
+            type: string
+        - name: extra1
+          in: query
+          required: false
+          description: One of a variable set of parameters used to supply extra constraint values (used by LOOKUP constraints).
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, text]
+      security: 
+        - BasicAuth: []
+        - JWTBearerAuth: []
+        - ApiKeyAuthToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToList'
+      tags:
+        - Append to List from Template Results
+  /list/chart:
+    post:
+      summary: Get the data to produce a graph.
+      description: >-
+        This service returns data that can be passed to charting software, such
+             as Google's javascript Charts API, to produce graphical representations
+             of the overview of data in a list.
+      operationId: listChartPost
+      parameters:
+        - name: list
+          in: query
+          required: true
+          description: The name of the list to investigate.
+          schema:
+            type: string
+        - name: widget
+          in: query
+          required: true
+          description: The name of the graphical widget to display.
+          schema:
+            type: string
+        - name: filter
+          in: query
+          required: false
+          description: An optional filter that some widgets accept.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, xml]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListChart'
+      tags:
+        - Graphical Widgets
+    get:
+      summary: Get the data to produce a graph.
+      description: >-
+        This service returns data that can be passed to charting software, such
+             as Google's javascript Charts API, to produce graphical representations
+             of the overview of data in a list.
+      operationId: listChartGet
+      parameters:
+        - name: list
+          in: query
+          required: true
+          description: The name of the list to investigate.
+          schema:
+            type: string
+        - name: widget
+          in: query
+          required: true
+          description: The name of the graphical widget to display.
+          schema:
+            type: string
+        - name: filter
+          in: query
+          required: false
+          description: An optional filter that some widgets accept.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, xml]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListChart'
+      tags:
+        - Graphical Widgets
+  /list/table:
+    post:
+      summary: Get the data as displayed by a table widget.
+      description: >-
+        This service returns data to produce a table representations
+              of the overview of data in a list
+      operationId: listTablePost
+      parameters:
+        - name: list
+          in: query
+          required: true
+          description: The name of the list to use as the population for the graph.
+          schema:
+            type: string
+        - name: widget
+          in: query
+          required: true
+          description: The name of the graphical widget to display.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, xml]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTable'
+      tags:
+        - Table Widgets
+    get:
+      summary: Get the data as displayed by a table widget.
+      description: >-
+        This service returns data to produce a table representations
+              of the overview of data in a list
+      operationId: listTableGet
+      parameters:
+        - name: list
+          in: query
+          required: true
+          description: The name of the list to use as the population for the graph.
+          schema:
+            type: string
+        - name: widget
+          in: query
+          required: true
+          description: The name of the graphical widget to display.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, xml]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTable'
+      tags:
+        - Table Widgets
+  /list/enrichment:
+    post:
+      summary: Get the data for a given enrichment widget.
+      description: >-
+        Enrichment widgets provide a statistical summary of what makes a list distinct from
+                the background population over a certain domain. They return a list of members of the
+                domain ranked by p-value (low to high).
+      operationId: listEnrichmentPost
+      parameters:
+        - name: list
+          in: query
+          required: false
+          description: The name of the list to investigate, optional unless identifiers is NULL..
+          schema:
+            type: string
+        - name: ids
+          in: query
+          required: false
+          description: Comma-separated list of InterMine object IDs, optional unless list name is NULL..
+          schema:
+            type: string
+        - name: widget
+          in: query
+          required: true
+          description: The name of the enrichment widget to display.
+          schema:
+            type: string
+        - name: population
+          in: query
+          required: false
+          description: The name of the list to use as the background population.
+          schema:
+            type: string
+        - name: maxp
+          in: query
+          required: true
+          description: The maximum p-value of results to display. The range is 0.0 - 1.0.
+          schema:
+            type: number
+            default: 0.05
+        - name: correction
+          in: query
+          required: true
+          description: The error correction algorithm to use..
+          schema:
+            type: string
+            default: Holm-Bonferroni
+            enum: [Holm-Bonferroni, Benjamini and Hochberg, Bonferroni, None]
+        - name: filter
+          in: query
+          required: false
+          description: An optional filter that some widgets accept.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, xml, tab, csv]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEnrichment'
+      tags:
+        - Enrichment Widgets
+    get:
+      summary: Get the data for a given enrichment widget.
+      description: >-
+        Enrichment widgets provide a statistical summary of what makes a list distinct from
+                the background population over a certain domain. They return a list of members of the
+                domain ranked by p-value (low to high).
+      operationId: listEnrichmentGet
+      parameters:
+        - name: list
+          in: query
+          required: false
+          description: The name of the list to investigate, optional unless identifiers is NULL..
+          schema:
+            type: string
+        - name: ids
+          in: query
+          required: false
+          description: Comma-separated list of InterMine object IDs, optional unless list name is NULL..
+          schema:
+            type: string
+        - name: widget
+          in: query
+          required: true
+          description: The name of the enrichment widget to display.
+          schema:
+            type: string
+        - name: population
+          in: query
+          required: false
+          description: The name of the list to use as the background population.
+          schema:
+            type: string
+        - name: maxp
+          in: query
+          required: true
+          description: The maximum p-value of results to display. The range is 0.0 - 1.0.
+          schema:
+            type: number
+            default: 0.05
+        - name: correction
+          in: query
+          required: true
+          description: The error correction algorithm to use..
+          schema:
+            type: string
+            default: Holm-Bonferroni
+            enum: [Holm-Bonferroni, Benjamini and Hochberg, Bonferroni, None]
+        - name: filter
+          in: query
+          required: false
+          description: An optional filter that some widgets accept.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: json
+            enum: [json, xml, tab, csv]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEnrichment'
+      tags:
+        - Enrichment Widgets
+components:
+  schemas:
+    Version:
+      type: object
+      properties:
+        version:
+          type: integer
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    VersionRelease:
+      type: object
+      properties:
+        version:
+          type: string
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    Model:
+      type: object
+      properties:
+        model:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    Summaryfields:
+      type: object
+      properties:
+        classes:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    Branding:
+      type: object
+      properties:
+        properties:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    Schema:
+      type: object
+      properties:
+        schemata:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    FacetList:
+      type: object
+      properties:
+        facetlist:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    Session:
+      type: object
+      properties:
+        token:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    WebProperties:
+      type: object
+      properties:
+        web-properties:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    SemanticMarkup:
+      type: object
+      properties:
+        facetlist:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    TemplatesSystem:
+      type: object
+      properties:
+        token:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    FacetSearch:
+      type: object
+      properties:
+        facets:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    Users:
+      type: object
+      properties:
+        user:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    PermanentUrl:
+      type: object
+      properties:
+        url:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    Sequence:
+      type: object
+      properties:
+        features:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    GeneratedCode:
+      type: object
+      properties:
+        code:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    QuickSearch:
+      type: object
+      properties:
+        totalHits:
+          type: object
+        facets:
+          type: object
+        results:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    JBrowseData:
+      type: object
+      properties:
+        results:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    WhoAmI:
+      type: object
+      properties:
+        user:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    Token:
+      type: object
+      properties:
+        token:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    Templates:
+      type: object
+      properties:
+        templates:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    SimpleJsonModel:
+      type: object
+      properties:
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    DeregistrationToken:
+      type: object
+      properties:
+        token:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    Preferences:
+      type: object
+      properties:
+        preferences:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    Tokens:
+      type: object
+      properties:
+        tokens:
+          type: array
+          items: 
+            type: string
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    PermanentToken:
+      type: object
+      properties:
+        token:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    SavedTemplate:
+      type: object
+      properties:
+        template:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    TemplateTags:
+      type: object
+      properties:
+        tags:
+          type: array
+          items: 
+            type: string
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    ListsGet:
+      type: object
+      properties:
+        lists:
+          type: array
+          items: 
+            type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    ListsDelete:
+      type: object
+      properties:
+        listName:
+          type: string
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    ListsPost:
+      type: object
+      properties:
+        listId:
+          type: integer
+        listName:
+          type: string
+        listSize:
+          type: integer
+        type:
+          type: string
+        unmatchedIdentifiers:
+          type: array
+          items: 
+            type: string
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    ListRename:
+      type: object
+      properties:
+        listId:
+          type: integer
+        listName:
+          type: string
+        listSize:
+          type: integer
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    ListAppend:
+      type: object
+      properties:
+        listId:
+          type: integer
+        listName:
+          type: string
+        listSize:
+          type: integer
+        unmatchedIdentifiers:
+          type: array
+          items: 
+            type: string
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    Tags:
+      type: object
+      properties:
+        tags:
+          type: array
+          items: 
+            type: string
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    ListOperations:
+      type: object
+      properties:
+        listId:
+          type: integer
+        listName:
+          type: string
+        type:
+          type: string
+        listSize:
+          type: integer
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    Widgets:
+      type: object
+      properties:
+        widgets:
+          type: array
+          items:
+            type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    QueryStore:
+      type: object
+      properties:
+        id:
+          type: string
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    QueryResultsJson:
+      type: object
+      properties:
+        modelName:
+          type: string
+        columnHeaders:
+          type: array
+          items:
+            type: string
+        rootClass:
+          type: string
+        start:
+          type: integer
+        views:
+          type: array
+          items:
+            type: string
+        results:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    QueryResultsJsonObject:
+      type: object
+      properties:
+        modelName:
+          type: string
+        columnHeaders:
+          type: array
+          items:
+            type: string
+        rootClass:
+          type: string
+        start:
+          type: integer
+        views:
+          type: array
+          items:
+            type: string
+        results:
+          type: array
+          items:
+            type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    QueryResultsJsonCount:
+      type: object
+      properties:
+        count:
+          type: integer
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    JaccardIndex:
+      type: object
+      properties:
+        input:
+          type: string
+        lists:
+          type: array
+          items:
+            type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    ListSharingPost:
+      type: object
+      properties:
+        share:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    ListSharingGet:
+      type: object
+      properties:
+        lists:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    ListInvitationSingle:
+      type: object
+      properties:
+        invitation:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    ListInvitationMultiple:
+      type: object
+      properties:
+        invitation:
+          type: array
+          items:
+            type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    SavedQueries:
+      type: object
+      properties:
+        queries:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    IdResolutionPost:
+      type: object
+      properties:
+        uid:
+          type: string
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    IdResolutionStatus:
+      type: object
+      properties:
+        status:
+          type: string
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    IdResolutionResults:
+      type: object
+      properties:
+        results:
+          type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    PossibleValues:
+      type: object
+      properties:
+        path:
+          type: string
+        field:
+          type: string
+        count:
+          type: integer
+        type:
+          type: string
+        class:
+          type: string
+        results:
+          type: array
+          items:
+            type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    ToList:
+      type: object
+      properties:
+        listId:
+          type: string
+        listName:
+          type: string
+        listSize:
+          type: integer
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    ListChart:
+      type: object
+      properties:
+        seriesValues:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+        list:
+          type: string
+        title:
+          type: string
+        rangeLabel:
+          type: string
+        notAnalysed:
+          type: integer
+        seriesLabels:
+          type: string
+        domainLabel:
+          type: string
+        requestedAt:
+          type: string
+        chartType:
+          type: string
+        seriesPath:
+          type: string
+        simplePathQuery:
+          type: string
+        pathQuery:
+          type: string
+        results:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    ListTable:
+      type: object
+      properties:
+        requestedAt:
+          type: string
+        columns:
+          type: string
+        description:
+          type: string
+        pathQuery:
+          type: string
+        type:
+          type: string
+        list:
+          type: string
+        title:
+          type: string
+        pathConstraint:
+          type: string
+        columnTitle:
+          type: string
+        notAnalysed:
+          type: integer
+        results:
+          type: array
+          items:
+            type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+    ListEnrichment:
+      type: object
+      properties:
+        extraAttribute:
+          type: string
+        populationCount:
+          type: integer
+        externalLink:
+          type: string
+        filterSelectedValue:
+          type: string
+        description:
+          type: string
+        label:
+          type: string
+        filters:
+          type: string
+        type:
+          type: string
+        list:
+          type: string
+        title:
+          type: string
+        pathConstraint:
+          type: string
+        notAnalysed:
+          type: integer
+        pathQueryForMatches:
+          type: string
+        requestedAt:
+          type: string
+        is_logged:
+          type: boolean
+        current_population:
+          type: string
+        pathQuery:
+          type: string
+        filterLabel:
+          type: string
+        results:
+          type: array
+          items:
+            type: object
+        executionTime:
+          type: string
+        wasSuccessful:
+          type: boolean
+        error:
+          type: string
+        statusCode:
+          type: integer
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+    JWTBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuthToken:
+      type: apiKey
+      in: header
+      name: token
