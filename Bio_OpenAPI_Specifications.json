@@ -1,1 +1,1343 @@
-
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "InterMine Bio Web Services specifications.",
+    "version": "1.0.0",
+    "title": "InterMine Bio Web Services",
+    "termsOfService": "",
+    "contact": {
+      "email": "info@intermine.org",
+      "url": "http://intermine.org/",
+      "name": "InterMine"
+    },
+    "license": {
+      "name": "LGPL 2.1",
+      "url": "https://github.com/intermine/intermine/blob/dev/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "GFF3 Query Results"
+    },
+    {
+      "name": "List as GFF3"
+    },
+    {
+      "name": "List as FASTA"
+    },
+    {
+      "name": "FASTA Query Results"
+    },
+    {
+      "name": "BED Query Results"
+    },
+    {
+      "name": "Create List from Genomic Intervals"
+    },
+    {
+      "name": "Genomic Intervals as GFF3"
+    },
+    {
+      "name": "Genomic Intervals as FASTA"
+    },
+    {
+      "name": "Genomic Intervals as BED"
+    },
+    {
+      "name": "JBrowse Configuration Files"
+    },
+    {
+      "name": "JBrowse Endpoint"
+    },
+    {
+      "name": "JBrowse Name Lookup"
+    }
+  ],
+  "paths": {
+    "/query/results/gff3": {
+      "post": {
+        "summary": "Query the Database for Sequence Annotations.",
+        "description": "This service provides full access to arbitrary database queries. Queries are accepted in a serialised XML or JSON format, executed and returned in a streaming manner. The query format is a custom subset of the capabilities of SQL; see the InterMine documentation for a full description of the query XML and JSON syntax. <br/><br/> This endpoint specialises in dealing with queries for sequence annotations, and returning results in [GFF3](http://en.wikipedia.org/wiki/General_feature_format) format. The user is responsible for ensuring that the query contains only suitable types for export. A suitable query is one where every view column references a field of a `SequenceFeature` (including all sub-classes). The particular field selected is not important, and the object itself will be selected.",
+        "operationId": "queryResultsGff3Post",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "A definition of the query to execute in Path-Query XML or JSON format.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "<query name=\"short genes on the X chromosome\" model=\"genomic\" view=\"Gene.id Gene.exons.id\">    <constraint path=\"Gene.chromosome.primaryIdentifier\" op=\"=\" value=\"X\"/>    <constraint path=\"Gene.length\" op=\"&lt;\" value=\"1000\"/></query>"
+          },
+          {
+            "name": "view",
+            "in": "query",
+            "required": false,
+            "description": "Extra columns to include as extra information in the ninth column.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": [
+              "Gene.length"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/x-gff3": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "GFF3 Query Results"
+        ]
+      },
+      "get": {
+        "summary": "Query the Database for Sequence Annotations.",
+        "description": "This service provides full access to arbitrary database queries. Queries are accepted in a serialised XML or JSON format, executed and returned in a streaming manner. The query format is a custom subset of the capabilities of SQL; see the InterMine documentation for a full description of the query XML and JSON syntax. <br/><br/> This endpoint specialises in dealing with queries for sequence annotations, and returning results in [GFF3](http://en.wikipedia.org/wiki/General_feature_format) format. The user is responsible for ensuring that the query contains only suitable types for export. A suitable query is one where every view column references a field of a `SequenceFeature` (including all sub-classes). The particular field selected is not important, and the object itself will be selected.",
+        "operationId": "queryResultsGff3Get",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "A definition of the query to execute in Path-Query XML or JSON format.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "<query name=\"short genes on the X chromosome\" model=\"genomic\" view=\"Gene.id Gene.exons.id\">    <constraint path=\"Gene.chromosome.primaryIdentifier\" op=\"=\" value=\"X\"/>    <constraint path=\"Gene.length\" op=\"&lt;\" value=\"1000\"/></query>"
+          },
+          {
+            "name": "view",
+            "in": "query",
+            "required": false,
+            "description": "Extra columns to include as extra information in the ninth column.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": [
+              "Gene.length"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/x-gff3": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "GFF3 Query Results"
+        ]
+      }
+    },
+    "/list/results/gff3": {
+      "post": {
+        "summary": "Get the Contents of a List as GFF3.",
+        "description": "This service allows users to export the contents of a list\n    of `SequenceFeature`s as GFF3.",
+        "operationId": "listResultsGff3Post",
+        "parameters": [
+          {
+            "name": "list",
+            "in": "query",
+            "required": true,
+            "description": "The name of the list.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/x-gff3": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "List as GFF3"
+        ]
+      },
+      "get": {
+        "summary": "Get the Contents of a List as GFF3.",
+        "description": "This service allows users to export the contents of a list\n    of `SequenceFeature`s as GFF3.",
+        "operationId": "listResultsGff3Get",
+        "parameters": [
+          {
+            "name": "list",
+            "in": "query",
+            "required": true,
+            "description": "The name of the list.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/x-gff3": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "List as GFF3"
+        ]
+      }
+    },
+    "/list/results/fasta": {
+      "post": {
+        "summary": "Get the Contents of a List as FASTA..",
+        "description": "This service allows users to export the contents of a list of `SequenceFeature`s or `Protein`s as [FASTA](http://en.wikipedia.org/wiki/FASTA_format)",
+        "operationId": "listResultsFastaPost",
+        "parameters": [
+          {
+            "name": "list",
+            "in": "query",
+            "required": true,
+            "description": "The name of the list.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/x-fasta": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "List as FASTA"
+        ]
+      },
+      "get": {
+        "summary": "Get the Contents of a List as FASTA..",
+        "description": "This service allows users to export the contents of a list of `SequenceFeature`s or `Protein`s as [FASTA](http://en.wikipedia.org/wiki/FASTA_format)",
+        "operationId": "listResultsFastaGet",
+        "parameters": [
+          {
+            "name": "list",
+            "in": "query",
+            "required": true,
+            "description": "The name of the list.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/x-fasta": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "List as FASTA"
+        ]
+      }
+    },
+    "/query/results/fasta": {
+      "post": {
+        "summary": "Query the Database for Sequence..",
+        "description": "This service provides full access to arbitrary database queries. Queries are accepted in a serialised XML or JSON format, executed and returned in a streaming manner. The query format is a custom subset of the capabilities of SQL; see the InterMine documentation for a full description of the query XML and JSON syntax. <br/><br/> This endpoint specialises in dealing with queries for sequence, and returning results in [FASTA](http://en.wikipedia.org/wiki/FASTA_format) format. The user is responsible for ensuring that the query contains only suitable types for export. <br/><br/> A suitable query is one with a single view column which references a field of a `SequenceFeature` (including all sub-classes) or of a a `Protein`. The particular field selected is not important, and the object itself will be selected.",
+        "operationId": "queryResultsFastaPost",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "A definition of the query to execute in Path-Query XML or JSON format.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "<query name=\"short genes on the X chromosome\" model=\"genomic\" view=\"Gene.id Gene.exons.id\">    <constraint path=\"Gene.chromosome.primaryIdentifier\" op=\"=\" value=\"X\"/>    <constraint path=\"Gene.length\" op=\"&lt;\" value=\"1000\"/></query>"
+          },
+          {
+            "name": "view",
+            "in": "query",
+            "required": false,
+            "description": "Extra columns to include as extra information in the ninth column.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": [
+              "Gene.length"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/x-fasta": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "FASTA Query Results"
+        ]
+      },
+      "get": {
+        "summary": "Query the Database for Sequence..",
+        "description": "This service provides full access to arbitrary database queries. Queries are accepted in a serialised XML or JSON format, executed and returned in a streaming manner. The query format is a custom subset of the capabilities of SQL; see the InterMine documentation for a full description of the query XML and JSON syntax. <br/><br/> This endpoint specialises in dealing with queries for sequence, and returning results in [FASTA](http://en.wikipedia.org/wiki/FASTA_format) format. The user is responsible for ensuring that the query contains only suitable types for export. <br/><br/> A suitable query is one with a single view column which references a field of a `SequenceFeature` (including all sub-classes) or of a a `Protein`. The particular field selected is not important, and the object itself will be selected.",
+        "operationId": "queryResultsFastaGet",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "A definition of the query to execute in Path-Query XML or JSON format.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "<query name=\"short genes on the X chromosome\" model=\"genomic\" view=\"Gene.id Gene.exons.id\">    <constraint path=\"Gene.chromosome.primaryIdentifier\" op=\"=\" value=\"X\"/>    <constraint path=\"Gene.length\" op=\"&lt;\" value=\"1000\"/></query>"
+          },
+          {
+            "name": "view",
+            "in": "query",
+            "required": false,
+            "description": "Extra columns to include as extra information in the ninth column.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": [
+              "Gene.length"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/x-fasta": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "FASTA Query Results"
+        ]
+      }
+    },
+    "/query/results/bed": {
+      "post": {
+        "summary": "Query the Database for Locations.",
+        "description": "This service provides full access to arbitrary database queries. Queries are accepted in a serialised XML or JSON format, executed and returned in a streaming manner. The query format is a custom subset of the capabilities of SQL; see the InterMine documentation for a full description of the query XML and JSON syntax. <br/><br/> This endpoint specialises in dealing with queries for genomic locations, and returning results in [UCSC BED](http://genome.ucsc.edu/FAQ/FAQformat.html) format. The user is responsible for ensuring that the query contains only suitable types for export. <br/><br/> A suitable query is one where every view column references a field of a `SequenceFeature` (including all sub-classes). The particular field selected is not important, and the object itself will be selected.",
+        "operationId": "queryResultsBedPost",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "A definition of the query to execute in Path-Query XML or JSON format.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "<query name=\"short genes on the X chromosome\" model=\"genomic\" view=\"Gene.id Gene.exons.id\">    <constraint path=\"Gene.chromosome.primaryIdentifier\" op=\"=\" value=\"X\"/>    <constraint path=\"Gene.length\" op=\"&lt;\" value=\"1000\"/></query>"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/x-ucsc-bed": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "BED Query Results"
+        ]
+      },
+      "get": {
+        "summary": "Query the Database for Locations.",
+        "description": "This service provides full access to arbitrary database queries. Queries are accepted in a serialised XML or JSON format, executed and returned in a streaming manner. The query format is a custom subset of the capabilities of SQL; see the InterMine documentation for a full description of the query XML and JSON syntax. <br/><br/> This endpoint specialises in dealing with queries for genomic locations, and returning results in [UCSC BED](http://genome.ucsc.edu/FAQ/FAQformat.html) format. The user is responsible for ensuring that the query contains only suitable types for export. <br/><br/> A suitable query is one where every view column references a field of a `SequenceFeature` (including all sub-classes). The particular field selected is not important, and the object itself will be selected.",
+        "operationId": "queryResultsBedGet",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "A definition of the query to execute in Path-Query XML or JSON format.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "<query name=\"short genes on the X chromosome\" model=\"genomic\" view=\"Gene.id Gene.exons.id\">    <constraint path=\"Gene.chromosome.primaryIdentifier\" op=\"=\" value=\"X\"/>    <constraint path=\"Gene.length\" op=\"&lt;\" value=\"1000\"/></query>"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/x-ucsc-bed": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "BED Query Results"
+        ]
+      }
+    },
+    "/regions/list": {
+      "post": {
+        "summary": "Create a New List from Features found in Genomic Intervals.",
+        "description": "This service creates a list of features found overlapping a set of genomic intervals. All features found will be saved in a list of the given name. The type of this list will be inferred from the types provided in the search input. <br/><br/> The input to this service is a `json` object that satisfies the following [json-schema](http://json-schema.org/) schema: <br/><br/> { <br/>\n  &nbsp; \"type\": \"object\", <br/>\n  &nbsp;   \"required\": [\"regions\", \"featureTypes\", \"organism\"], <br/>\n  &nbsp;   \"properties\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;      \"regions\": \"#/definitions/stringset\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"featureTypes\": \"#/definitions/stringset\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"isInterbase\": { \"type\": \"boolean\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"extension\": { \"type\": \"number\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"organism\": { \"type\": \"string\" } <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  }, <br/>\n  &nbsp;  \"definitions\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"stringset\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;           \"type\": \"array\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;          \"items: { \"type: \"string\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;           \"minItems\": 1, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;            \"uniqueItems\": true <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;        } <br/>\n  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;    } <br/>\n}",
+        "operationId": "regionsListPost",
+        "parameters": [
+          {
+            "name": "listName",
+            "in": "query",
+            "required": true,
+            "description": "The name of the list to save these features to.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "required": false,
+            "description": "An optional description for this list.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "required": false,
+            "description": "A set of tags to apply to this list (separated by semi-colon).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "replaceExisting",
+            "in": "query",
+            "required": false,
+            "description": "Whether or not to replace any existing list of this name.",
+            "schema": {
+              "type": "boolean",
+              "enum": [
+                true,
+                false
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A representation of the search request.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "example": "{\n  \"regions\": [\n    \"2L:14615455..14619002\",\n    \"2R:5866646..5868384\",\n    \"3R:2578486..2580016\"\n  ],\n  \"featureTypes\": [\"Gene\", \"Exon\", \"Intron\"],\n  \"organism\": \"D. melanogaster\"\n}"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListGenomicIntervals"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Create List from Genomic Intervals"
+        ]
+      },
+      "get": {
+        "summary": "Create a New List from Features found in Genomic Intervals.",
+        "description": "This service creates a list of features found overlapping a set of genomic intervals. All features found will be saved in a list of the given name. The type of this list will be inferred from the types provided in the search input. <br/><br/> The input to this service is a `json` object that satisfies the following [json-schema](http://json-schema.org/) schema: <br/><br/> { <br/>\n  &nbsp; \"type\": \"object\", <br/>\n  &nbsp;   \"required\": [\"regions\", \"featureTypes\", \"organism\"], <br/>\n  &nbsp;   \"properties\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;      \"regions\": \"#/definitions/stringset\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"featureTypes\": \"#/definitions/stringset\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"isInterbase\": { \"type\": \"boolean\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"extension\": { \"type\": \"number\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"organism\": { \"type\": \"string\" } <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  }, <br/>\n  &nbsp;  \"definitions\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"stringset\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;           \"type\": \"array\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;          \"items: { \"type: \"string\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;           \"minItems\": 1, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;            \"uniqueItems\": true <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;        } <br/>\n  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;    } <br/>\n}",
+        "operationId": "regionsListGet",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "description": "The name of the list to save these features to.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "required": false,
+            "description": "An optional description for this list.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "required": false,
+            "description": "A set of tags to apply to this list (separated by semi-colon).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "replaceExisting",
+            "in": "query",
+            "required": false,
+            "description": "Whether or not to replace any existing list of this name.",
+            "schema": {
+              "type": "boolean",
+              "enum": [
+                true,
+                false
+              ]
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "The region search input.",
+            "schema": {
+              "type": "string",
+              "example": "{\n  \"regions\": [\n    \"2L:14615455..14619002\",\n    \"2R:5866646..5868384\",\n    \"3R:2578486..2580016\"\n  ],\n  \"featureTypes\": [\"Gene\", \"Exon\", \"Intron\"],\n  \"organism\": \"D. melanogaster\"\n}"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BasicAuth": []
+          },
+          {
+            "JWTBearerAuth": []
+          },
+          {
+            "ApiKeyAuthToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListGenomicIntervals"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Create List from Genomic Intervals"
+        ]
+      }
+    },
+    "/regions/gff3": {
+      "post": {
+        "summary": "Get Genomic Features overlapping given Regions.",
+        "description": "This service returns information about features found overlapping a set of genomic intervals. The results are returned in the General Feature Format [GFF3](http://en.wikipedia.org/wiki/General_feature_format) where each row represents a feature. <br/><br/> The input to this service is a `json` object that satisfies the following [json-schema](http://json-schema.org/) schema: <br/><br/> { <br/>\n  &nbsp; \"type\": \"object\", <br/>\n  &nbsp;   \"required\": [\"regions\", \"featureTypes\", \"organism\"], <br/>\n  &nbsp;   \"properties\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;      \"regions\": \"#/definitions/stringset\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"featureTypes\": \"#/definitions/stringset\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"isInterbase\": { \"type\": \"boolean\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"extension\": { \"type\": \"number\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"organism\": { \"type\": \"string\" } <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  }, <br/>\n  &nbsp;  \"definitions\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"stringset\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;           \"type\": \"array\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;          \"items: { \"type: \"string\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;           \"minItems\": 1, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;            \"uniqueItems\": true <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;        } <br/>\n  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;    } <br/>\n}",
+        "operationId": "regionsGff3Post",
+        "requestBody": {
+          "description": "A representation of the search request.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "example": "{\n  \"regions\": [\n    \"2L:14615455..14619002\",\n    \"2R:5866646..5868384\",\n    \"3R:2578486..2580016\"\n  ],\n  \"featureTypes\": [\"Gene\", \"Exon\", \"Intron\"],\n  \"organism\": \"D. melanogaster\"\n}"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/x-gff3": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Genomic Intervals as GFF3"
+        ]
+      },
+      "get": {
+        "summary": "Get Genomic Features overlapping given Regions.",
+        "description": "This service returns information about features found overlapping a set of genomic intervals. The results are returned in the General Feature Format [GFF3](http://en.wikipedia.org/wiki/General_feature_format) where each row represents a feature. <br/><br/> The input to this service is a `json` object that satisfies the following [json-schema](http://json-schema.org/) schema: <br/><br/> { <br/>\n  &nbsp; \"type\": \"object\", <br/>\n  &nbsp;   \"required\": [\"regions\", \"featureTypes\", \"organism\"], <br/>\n  &nbsp;   \"properties\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;      \"regions\": \"#/definitions/stringset\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"featureTypes\": \"#/definitions/stringset\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"isInterbase\": { \"type\": \"boolean\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"extension\": { \"type\": \"number\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"organism\": { \"type\": \"string\" } <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  }, <br/>\n  &nbsp;  \"definitions\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"stringset\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;           \"type\": \"array\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;          \"items: { \"type: \"string\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;           \"minItems\": 1, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;            \"uniqueItems\": true <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;        } <br/>\n  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;    } <br/>\n}",
+        "operationId": "regionsGff3Get",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "The region search input.",
+            "schema": {
+              "type": "string",
+              "example": "{\n  \"regions\": [\n    \"2L:14615455..14619002\",\n    \"2R:5866646..5868384\",\n    \"3R:2578486..2580016\"\n  ],\n  \"featureTypes\": [\"Gene\", \"Exon\", \"Intron\"],\n  \"organism\": \"D. melanogaster\"\n}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/x-gff3": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Genomic Intervals as GFF3"
+        ]
+      }
+    },
+    "/regions/sequence": {
+      "post": {
+        "summary": "Get Genomic Features overlapping given Regions.",
+        "description": "This service returns information about features found overlapping a set of genomic intervals. The results are returned in the [FASTA](http://en.wikipedia.org/wiki/FASTA_format) format where each record represents a feature, including the sequence associated with that feature. <br/><br/> The input to this service is a `json` object that satisfies the following [json-schema](http://json-schema.org/) schema: <br/><br/> { <br/>\n  &nbsp; \"type\": \"object\", <br/>\n  &nbsp;   \"required\": [\"regions\", \"featureTypes\", \"organism\"], <br/>\n  &nbsp;   \"properties\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;      \"regions\": \"#/definitions/stringset\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"featureTypes\": \"#/definitions/stringset\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"isInterbase\": { \"type\": \"boolean\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"extension\": { \"type\": \"number\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"organism\": { \"type\": \"string\" } <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  }, <br/>\n  &nbsp;  \"definitions\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"stringset\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;           \"type\": \"array\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;          \"items: { \"type: \"string\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;           \"minItems\": 1, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;            \"uniqueItems\": true <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;        } <br/>\n  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;    } <br/>\n}",
+        "operationId": "regionsSequencePost",
+        "requestBody": {
+          "description": "A representation of the search request.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "example": "{\n  \"regions\": [\n    \"2L:14615455..14619002\",\n    \"2R:5866646..5868384\",\n    \"3R:2578486..2580016\"\n  ],\n  \"featureTypes\": [\"Gene\", \"Exon\", \"Intron\"],\n  \"organism\": \"D. melanogaster\"\n}"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/x-fasta": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Genomic Intervals as FASTA"
+        ]
+      },
+      "get": {
+        "summary": "Get Genomic Features overlapping given Regions.",
+        "description": "This service returns information about features found overlapping a set of genomic intervals. The results are returned in the [FASTA](http://en.wikipedia.org/wiki/FASTA_format) format where each record represents a feature, including the sequence associated with that feature. <br/><br/> The input to this service is a `json` object that satisfies the following [json-schema](http://json-schema.org/) schema: <br/><br/> { <br/>\n  &nbsp; \"type\": \"object\", <br/>\n  &nbsp;   \"required\": [\"regions\", \"featureTypes\", \"organism\"], <br/>\n  &nbsp;   \"properties\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;      \"regions\": \"#/definitions/stringset\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"featureTypes\": \"#/definitions/stringset\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"isInterbase\": { \"type\": \"boolean\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"extension\": { \"type\": \"number\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"organism\": { \"type\": \"string\" } <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  }, <br/>\n  &nbsp;  \"definitions\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"stringset\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;           \"type\": \"array\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;          \"items: { \"type: \"string\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;           \"minItems\": 1, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;            \"uniqueItems\": true <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;        } <br/>\n  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;    } <br/>\n}",
+        "operationId": "regionsSequenceGet",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "The region search input.",
+            "schema": {
+              "type": "string",
+              "example": "{\n  \"regions\": [\n    \"2L:14615455..14619002\",\n    \"2R:5866646..5868384\",\n    \"3R:2578486..2580016\"\n  ],\n  \"featureTypes\": [\"Gene\", \"Exon\", \"Intron\"],\n  \"organism\": \"D. melanogaster\"\n}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/x-fasta": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Genomic Intervals as FASTA"
+        ]
+      }
+    },
+    "/regions/bed": {
+      "post": {
+        "summary": "Get Genomic Features overlapping given Regions.",
+        "description": "This service returns information about features found overlapping a set of genomic intervals. The results are returned in the [UCSC BED](http://genome.ucsc.edu/FAQ/FAQformat.html) format where each row represents a feature. <br/><br/> The input to this service is a `json` object that satisfies the following [json-schema](http://json-schema.org/) schema: <br/><br/> { <br/>\n  &nbsp; \"type\": \"object\", <br/>\n  &nbsp;   \"required\": [\"regions\", \"featureTypes\", \"organism\"], <br/>\n  &nbsp;   \"properties\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;      \"regions\": \"#/definitions/stringset\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"featureTypes\": \"#/definitions/stringset\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"isInterbase\": { \"type\": \"boolean\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"extension\": { \"type\": \"number\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"organism\": { \"type\": \"string\" } <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  }, <br/>\n  &nbsp;  \"definitions\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"stringset\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;           \"type\": \"array\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;          \"items: { \"type: \"string\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;           \"minItems\": 1, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;            \"uniqueItems\": true <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;        } <br/>\n  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;    } <br/>\n}",
+        "operationId": "regionsBedPost",
+        "requestBody": {
+          "description": "A representation of the search request.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "example": "{\n  \"regions\": [\n    \"2L:14615455..14619002\",\n    \"2R:5866646..5868384\",\n    \"3R:2578486..2580016\"\n  ],\n  \"featureTypes\": [\"Gene\", \"Exon\", \"Intron\"],\n  \"organism\": \"D. melanogaster\"\n}"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/x-ucsc-bed": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Genomic Intervals as BED"
+        ]
+      },
+      "get": {
+        "summary": "Get Genomic Features overlapping given Regions.",
+        "description": "This service returns information about features found overlapping a set of genomic intervals. The results are returned in the [UCSC BED](http://genome.ucsc.edu/FAQ/FAQformat.html) format where each row represents a feature. <br/><br/> The input to this service is a `json` object that satisfies the following [json-schema](http://json-schema.org/) schema: <br/><br/> { <br/>\n  &nbsp; \"type\": \"object\", <br/>\n  &nbsp;   \"required\": [\"regions\", \"featureTypes\", \"organism\"], <br/>\n  &nbsp;   \"properties\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;      \"regions\": \"#/definitions/stringset\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"featureTypes\": \"#/definitions/stringset\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"isInterbase\": { \"type\": \"boolean\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"extension\": { \"type\": \"number\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"organism\": { \"type\": \"string\" } <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  }, <br/>\n  &nbsp;  \"definitions\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;       \"stringset\": { <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;           \"type\": \"array\", <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;          \"items: { \"type: \"string\" }, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;           \"minItems\": 1, <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;            \"uniqueItems\": true <br/>\n  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;        } <br/>\n  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;    } <br/>\n}",
+        "operationId": "regionsBedGet",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "The region search input.",
+            "schema": {
+              "type": "string",
+              "example": "{\n  \"regions\": [\n    \"2L:14615455..14619002\",\n    \"2R:5866646..5868384\",\n    \"3R:2578486..2580016\"\n  ],\n  \"featureTypes\": [\"Gene\", \"Exon\", \"Intron\"],\n  \"organism\": \"D. melanogaster\"\n}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/x-ucsc-bed": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Genomic Intervals as BED"
+        ]
+      }
+    },
+    "/jbrowse/config/{domain}/trackList.json": {
+      "get": {
+        "summary": "Get the Configuration for the Track Listing.",
+        "description": "This service serves a `trackList.json` file suitable for use with JBrowse. See [Writing JBrowse Compatible Web Services](http://gmod.org/wiki/JBrowse_Configuration_Guide#Writing_JBrowse-compatible_Web_Services).",
+        "operationId": "jBrowseConfigTrackList",
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "path",
+            "required": true,
+            "description": "The domain we are operating in. This will generally refer to an organism taxon-id.",
+            "schema": {
+              "type": "string",
+              "default": "{taxonId}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JBrowseConfigTrackList"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "JBrowse Configuration Files"
+        ]
+      }
+    },
+    "/jbrowse/config/{domain}/seq/refSeqs.json": {
+      "get": {
+        "summary": "Get the Configuration for the Reference Sequences.",
+        "description": "This service serves a `refSeqs.json` file suitable for use with JBrowse. See [Writing JBrowse Compatible Web Services](http://gmod.org/wiki/JBrowse_Configuration_Guide#Writing_JBrowse-compatible_Web_Services)",
+        "operationId": "jBrowseConfigRefSeqs",
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "path",
+            "required": true,
+            "description": "The domain we are operating in. This will generally refer to an organism taxon-id.",
+            "schema": {
+              "type": "string",
+              "default": "{taxonId}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "JBrowse Configuration Files"
+        ]
+      }
+    },
+    "/jbrowse/{domain}/features/{refseq}": {
+      "get": {
+        "summary": "Get Features on a Reference Sequence.",
+        "description": "This service provides the functionality for `JBrowse` feature\n        requests.\n        <br/><br/>\n        See [Writing JBrowse Compatible Web Services](http://gmod.org/wiki/JBrowse_Configuration_Guide#Writing_JBrowse-compatible_Web_Services)",
+        "operationId": "jBrowseFeaturesGet",
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "path",
+            "required": true,
+            "description": "The domain we are operating in. This will generally refer to an organism taxon-id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "refseq",
+            "in": "path",
+            "required": true,
+            "description": "The identifier of the reference sequence to find features within.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "description": "The starting index.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "description": "The end index.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "description": "The type of feature to return.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "reference",
+            "in": "query",
+            "required": false,
+            "description": "Make this a reference sequence request.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JBrowseFeatures"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "JBrowse Endpoint"
+        ]
+      }
+    },
+    "/jbrowse/{domain}/stats/global": {
+      "get": {
+        "summary": "Get Statistics about the Features Served by this Store.",
+        "description": "This service provides the functionality for `JBrowse` global statistics\n        requests.\n        <br/><br/>\n        See [Writing JBrowse Compatible Web Services](http://gmod.org/wiki/JBrowse_Configuration_Guide#Writing_JBrowse-compatible_Web_Services)",
+        "operationId": "jBrowseStatsGlobalGet",
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "path",
+            "required": true,
+            "description": "The domain we are operating in. This will generally refer to an organism taxon-id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "description": "The type of feature we are interested in.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JBrowseFeatureStats"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "JBrowse Endpoint"
+        ]
+      }
+    },
+    "/jbrowse/{domain}/stats/region/{refseq}": {
+      "get": {
+        "summary": "Get Statistics for a Sub-Set of Features Served by this Store.",
+        "description": "This service provides the functionality for `JBrowse` region statistics\n        requests.\n        <br/><br/>\n        See [Writing JBrowse Compatible Web Services](http://gmod.org/wiki/JBrowse_Configuration_Guide#Writing_JBrowse-compatible_Web_Services)",
+        "operationId": "jBrowseStatsRegionGet",
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "path",
+            "required": true,
+            "description": "The domain we are operating in. This will generally refer to an organism taxon-id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "refseq",
+            "in": "path",
+            "required": true,
+            "description": "The identifier of the reference sequence to find features within.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "description": "The starting index.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "description": "The end index.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "description": "The type of feature we are interested in.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JBrowseFeatureStats"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "JBrowse Endpoint"
+        ]
+      }
+    },
+    "/jbrowse/{domain}/stats/regionFeatureDensities/{refseq}": {
+      "get": {
+        "summary": "Get Binned Density Statistics for a Sub-Set of Features Served by this Store.",
+        "description": "This service provides the functionality for `JBrowse` binned\n        region statistics requests.\n        <br/><br/>\n        See [Writing JBrowse Compatible Web Services](http://gmod.org/wiki/JBrowse_Configuration_Guide#Writing_JBrowse-compatible_Web_Services)",
+        "operationId": "jBrowseRegionFeatureDensitiesGet",
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "path",
+            "required": true,
+            "description": "The domain we are operating in. This will generally refer to an organism taxon-id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "refseq",
+            "in": "path",
+            "required": true,
+            "description": "The identifier of the reference sequence to find features within.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "description": "The starting index.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "description": "The end index.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "description": "The type of feature we are interested in.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "basesPerBin",
+            "in": "query",
+            "required": false,
+            "description": "The number of bases per bin, used to determine the number of bins.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JBrowseFeatureDensityStats"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "JBrowse Endpoint"
+        ]
+      }
+    },
+    "/jbrowse/names/{domain}": {
+      "get": {
+        "summary": "Lookup features by name.",
+        "description": "This service provides the functionality for `JBrowse` name\n        look-up requests.\n        <br/><br/>\n        See [Writing JBrowse Compatible Web Services](http://gmod.org/wiki/JBrowse_Configuration_Guide#Writing_JBrowse-compatible_Web_Services)",
+        "operationId": "jBrowseNamesGet",
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "path",
+            "required": true,
+            "description": "The domain for this search (generally an organism).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startswith",
+            "in": "query",
+            "required": false,
+            "description": "The search prefix string to look for. Supply either startswith or equals.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "equals",
+            "in": "query",
+            "required": false,
+            "description": "The name of the item.Supply either startswith or equals.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "JBrowse Name Lookup"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ListGenomicIntervals": {
+        "type": "object",
+        "properties": {
+          "listName": {
+            "type": "string"
+          },
+          "listSize": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string"
+          },
+          "invalidSpans": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "JBrowseConfigTrackList": {
+        "type": "object",
+        "properties": {
+          "tracks": {
+            "type": "object"
+          },
+          "names": {
+            "type": "object"
+          },
+          "dataset_id": {
+            "type": "string"
+          }
+        }
+      },
+      "JBrowseFeatures": {
+        "type": "object",
+        "properties": {
+          "features": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "JBrowseFeatureStats": {
+        "type": "object",
+        "properties": {
+          "featureDensity": {
+            "type": "number"
+          },
+          "featureCount": {
+            "type": "integer"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      },
+      "JBrowseFeatureDensityStats": {
+        "type": "object",
+        "properties": {
+          "bins": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "stats": {
+            "type": "object"
+          },
+          "executionTime": {
+            "type": "string"
+          },
+          "wasSuccessful": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      },
+      "JWTBearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "ApiKeyAuthToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "token"
+      }
+    }
+  }
+}
